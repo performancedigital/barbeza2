@@ -1,4 +1,4 @@
-﻿import { Play } from "lucide-react"
+import { Play } from "lucide-react"
 import { GoldDivider } from "@/components/ui/GoldDivider"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
 export function VideoSection() {
@@ -7,8 +7,8 @@ export function VideoSection() {
     <section className="section-padding bg-natural-alt">
       <div className="max-w-5xl mx-auto px-6 md:px-10">
         <div className="text-center mb-12">
-          <p className="font-inter text-xs text-forest tracking-[0.35em] uppercase mb-3">Conheca o Ambiente</p>
-          <h2 className="font-raleway font-black text-4xl md:text-5xl text-ink mb-4">O Espaco em Video</h2>
+          <p className="font-inter text-xs text-forest tracking-[0.35em] uppercase mb-3">Conheça o Ambiente</p>
+          <h2 className="font-raleway font-black text-4xl md:text-5xl text-ink mb-4">O Espaço em Vídeo</h2>
           <GoldDivider className="max-w-xs mx-auto"/>
         </div>
         <div ref={ref} className="relative rounded-2xl overflow-hidden shadow-[0_8px_60px_rgba(61,90,61,0.15)] border border-natural-border transition-all duration-700"
@@ -23,7 +23,7 @@ export function VideoSection() {
               </div>
               <div className="text-center">
                 <p className="font-raleway text-white font-bold text-sm tracking-widest mb-1">AMBIENTE BARBEZA</p>
-                <p className="font-inter text-white/40 text-xs">Video em breve</p>
+                <p className="font-inter text-white/40 text-xs">Vídeo em breve</p>
               </div>
             </div>
           </div>

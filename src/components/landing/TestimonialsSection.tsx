@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import { TESTIMONIALS } from "@/data/content"
 import { GoldDivider } from "@/components/ui/GoldDivider"
@@ -16,7 +16,7 @@ export function TestimonialsSection() {
       <div className="max-w-4xl mx-auto px-6 md:px-10">
         <div className="text-center mb-14">
           <p className="font-inter text-xs text-olive/80 tracking-[0.35em] uppercase mb-3">O que dizem</p>
-          <h2 className="font-raleway font-black text-4xl md:text-5xl text-white mb-4">Depoimentos</h2>
+          <h2 className="font-raleway font-black text-4xl md:text-5xl text-white mb-4">Avaliações</h2>
           <GoldDivider className="max-w-xs mx-auto" light={true}/>
         </div>
         <div ref={ref} style={{ opacity:isVisible?1:0, transition:"opacity 0.7s ease" }}>

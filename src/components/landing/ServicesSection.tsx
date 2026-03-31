@@ -1,4 +1,4 @@
-﻿import { Scissors, Smile, Sparkles, Crown, type LucideProps } from "lucide-react"
+import { Scissors, Smile, Sparkles, Crown, type LucideProps } from "lucide-react"
 import { type ForwardRefExoticComponent, type RefAttributes } from "react"
 import { SERVICES, BUSINESS } from "@/data/content"
 import { Button } from "@/components/ui/Button"
@@ -13,7 +13,7 @@ export function ServicesSection() {
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <div className="text-center mb-16">
           <p className="font-inter text-xs text-forest tracking-[0.35em] uppercase mb-3">O que oferecemos</p>
-          <h2 className="font-raleway font-black text-4xl md:text-5xl text-ink mb-4">Nossos Servicos</h2>
+          <h2 className="font-raleway font-black text-4xl md:text-5xl text-ink mb-4">Nossos Serviços</h2>
           <GoldDivider icon="scissor" className="max-w-xs mx-auto"/>
         </div>
         <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

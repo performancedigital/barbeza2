@@ -1,15 +1,15 @@
-﻿import { useState } from "react"
+import { useState } from "react"
 import { useScrollY, useScrollProgress } from "@/hooks/useScrollAnimation"
 import { BUSINESS } from "@/data/content"
 import { Button } from "@/components/ui/Button"
 import { Menu, X } from "lucide-react"
 
 const NAV_LINKS = [
-  { label: "Servicos",     href: "#servicos" },
-  { label: "Espaco",       href: "#espaco" },
+  { label: "Serviços",    href: "#servicos" },
+  { label: "Espaço",      href: "#espaco" },
   { label: "Galeria",      href: "#galeria" },
-  { label: "Depoimentos",  href: "#depoimentos" },
-  { label: "Contato",      href: "#contato" },
+  { label: "Depoimentos", href: "#depoimentos" },
+  { label: "Contato",     href: "#contato" },
 ]
 
 export function Navbar() {
@@ -32,14 +32,14 @@ export function Navbar() {
       }`}>
         <div className="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between h-16 md:h-18">
 
-          {/* Logo: transparente no hero, aparece ao rolar */}
-          <a href="/" className={`flex items-center gap-2 group transition-all duration-300 ${scrolled ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-            <div className="w-8 h-8 rounded-full bg-forest flex items-center justify-center overflow-hidden">
+          {/* Logo sempre visível: discreta no hero, destacada ao rolar */}
+          <a href="/" className="flex items-center gap-2 group transition-all duration-300">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center overflow-hidden transition-all duration-300 ${scrolled ? "bg-forest" : "bg-white/15 backdrop-blur-sm border border-white/25"}`}>
               <img src="/assets/logo/logo.png" alt="B" className="w-7 h-7 object-contain" />
             </div>
             <div>
-              <p className="font-raleway text-forest text-sm font-black tracking-[0.2em] leading-none">BARBEZA</p>
-              <p className="font-inter text-ink-dim text-[9px] tracking-widest uppercase">Barbearia</p>
+              <p className={`font-raleway text-sm font-black tracking-[0.2em] leading-none transition-colors duration-300 ${scrolled ? "text-forest" : "text-white"}`}>BARBEZA</p>
+              <p className={`font-inter text-[9px] tracking-widest uppercase transition-colors duration-300 ${scrolled ? "text-ink-dim" : "text-white/60"}`}>Barbearia</p>
             </div>
           </a>
 
@@ -77,7 +77,6 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
       {open && (
         <div className="fixed inset-0 z-[200] bg-natural/98 backdrop-blur-xl flex flex-col">
           <div className="flex items-center justify-between px-6 h-16 border-b border-natural-border">
