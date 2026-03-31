@@ -20,7 +20,7 @@ export function HeroSection() {
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-forest-deep">
       <div className="absolute inset-0">
-        <img src="/assets/images/hero-bg.gif" alt=""
+        <img src="/assets/images/hero-bg.webp" alt=""
           className="absolute inset-0 w-full h-full object-cover opacity-35"
           loading="eager"
           onError={(e) => { (e.target as HTMLImageElement).src = "/assets/images/hero-bg.jpg" }}
