@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { BUSINESS } from "@/data/content"
 import { Button } from "@/components/ui/Button"
 import { ChevronDown } from "lucide-react"
@@ -6,11 +6,10 @@ import { ChevronDown } from "lucide-react"
 export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoLoaded, setVideoLoaded] = useState(false)
-  const [phase, setPhase] = useState(0) // 0=init 1=logo 2=tagline 3=slogan 4=cta
+  const [phase, setPhase] = useState(0)
 
   useEffect(() => {
     videoRef.current?.play().catch(() => {})
-    // entrada escalonada
     const t1 = setTimeout(() => setPhase(1), 200)
     const t2 = setTimeout(() => setPhase(2), 900)
     const t3 = setTimeout(() => setPhase(3), 1300)
@@ -20,18 +19,13 @@ export function HeroSection() {
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-forest-deep">
-
-      {/* â”€â”€ Background â”€â”€ */}
       <div className="absolute inset-0">
-        <img
-          src="/assets/images/hero-bg.gif"
-          alt=""
+        <img src="/assets/images/hero-bg.gif" alt=""
           className="absolute inset-0 w-full h-full object-cover opacity-35"
           loading="eager"
           onError={(e) => { (e.target as HTMLImageElement).src = "/assets/images/hero-bg.jpg" }}
         />
-        <video
-          ref={videoRef}
+        <video ref={videoRef}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? "opacity-50" : "opacity-0"}`}
           autoPlay muted loop playsInline preload="metadata"
           onLoadedData={() => setVideoLoaded(true)}
@@ -39,187 +33,111 @@ export function HeroSection() {
           <source src="/assets/videos/ambiente.mp4" type="video/mp4" />
         </video>
       </div>
-
-      {/* â”€â”€ Overlays â”€â”€ */}
       <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/80 via-forest-deep/50 to-forest-deep/95" />
       <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/45 to-transparent" />
-      {/* linha oliva esquerda */}
       <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-olive/70 to-transparent" />
 
-      {/* â”€â”€ PartÃ­culas de brilho â”€â”€ */}
+      {/* Particulas */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {[
-          {top:"15%",left:"8%",  size:3, delay:"0s",   dur:"4s"  },
-          {top:"25%",left:"88%", size:2, delay:"0.8s", dur:"5s"  },
-          {top:"70%",left:"12%", size:2, delay:"1.5s", dur:"6s"  },
-          {top:"60%",left:"82%", size:4, delay:"0.3s", dur:"4.5s"},
-          {top:"40%",left:"50%", size:2, delay:"2s",   dur:"7s"  },
-          {top:"80%",left:"60%", size:3, delay:"1s",   dur:"5.5s"},
+          {top:"15%",left:"8%",  s:3, d:"0s",   r:"4s"  },
+          {top:"25%",left:"88%", s:2, d:"0.8s", r:"5s"  },
+          {top:"70%",left:"12%", s:2, d:"1.5s", r:"6s"  },
+          {top:"60%",left:"82%", s:4, d:"0.3s", r:"4.5s"},
+          {top:"40%",left:"50%", s:2, d:"2s",   r:"7s"  },
+          {top:"80%",left:"60%", s:3, d:"1s",   r:"5.5s"},
         ].map((p,i) => (
-          <div key={i} className="absolute rounded-full bg-olive/40"
-            style={{
-              top: p.top, left: p.left,
-              width: p.size, height: p.size,
-              animation: `particleFloat ${p.dur} ease-in-out ${p.delay} infinite`,
-            }}
-          />
+          <div key={i} style={{ position:"absolute", top:p.top, left:p.left, width:p.s, height:p.s,
+            borderRadius:"50%", background:"rgba(139,133,85,0.5)",
+            animation:`particleFloat ${p.r} ease-in-out ${p.d} infinite` }} />
         ))}
       </div>
 
-      {/* â”€â”€ ConteÃºdo central â”€â”€ */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto flex flex-col items-center">
+      <div className="relative z-10 text-center px-6 max-w-3xl mx-auto flex flex-col items-center">
 
-        {/* LOGO â€” grande, chamativa, com glow animado */}
-        <div
-          className="mb-8 relative"
+        {/* LOGO vertical branca — tamanho proporcional */}
+        <div className="mb-8 relative"
           style={{
             opacity: phase >= 1 ? 1 : 0,
             transform: phase >= 1 ? "scale(1) translateY(0)" : "scale(0.82) translateY(-20px)",
             transition: "opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1)",
           }}
         >
-          {/* halo pulsante atrÃ¡s da logo */}
-          <div
-            className="absolute inset-0 -m-6 rounded-full pointer-events-none"
-            style={{
-              background: "radial-gradient(ellipse at center, rgba(139,133,85,0.22) 0%, transparent 70%)",
-              animation: phase >= 1 ? "haloglow 3s ease-in-out infinite" : "none",
-            }}
-          />
-          {/* flash Ãºnico na entrada */}
-          {phase >= 1 && (
-            <div
-              className="absolute inset-0 -m-8 rounded-full pointer-events-none"
-              style={{
-                background: "radial-gradient(ellipse at center, rgba(255,255,255,0.18) 0%, transparent 65%)",
-                animation: "flashOnce 1.2s ease-out forwards",
-              }}
-            />
-          )}
+          <div style={{
+            position:"absolute", inset:0, margin:"-20px",
+            background:"radial-gradient(ellipse at center, rgba(139,133,85,0.22) 0%, transparent 70%)",
+            animation: phase >= 1 ? "haloglow 3s ease-in-out infinite" : "none",
+          }} />
+          {phase >= 1 && <div style={{
+            position:"absolute", inset:0, margin:"-30px",
+            background:"radial-gradient(ellipse at center, rgba(255,255,255,0.18) 0%, transparent 65%)",
+            animation:"flashOnce 1.2s ease-out forwards",
+          }} />}
           <img
             src="/assets/logo/logo-horizontal-branca.png"
             alt="Barbeza Barbearia"
-            className="relative w-auto object-contain"
             style={{
-              height: "clamp(180px, 28vw, 320px)",
+              position:"relative",
+              height: "clamp(160px, 22vw, 240px)",
+              width: "auto",
+              maxWidth: "80vw",
+              objectFit: "contain",
               filter: "drop-shadow(0 6px 32px rgba(139,133,85,0.6)) drop-shadow(0 0 60px rgba(139,133,85,0.25))",
             }}
           />
         </div>
 
-        {/* linha divisÃ³ria oliva */}
-        <div
-          className="flex items-center gap-4 mb-6 w-full max-w-xs"
-          style={{
-            opacity: phase >= 2 ? 1 : 0,
-            transform: phase >= 2 ? "scaleX(1)" : "scaleX(0.3)",
-            transition: "opacity 0.6s ease, transform 0.6s ease",
-          }}
-        >
+        <div className="flex items-center gap-4 mb-5 w-full max-w-xs"
+          style={{ opacity:phase>=2?1:0, transform:phase>=2?"scaleX(1)":"scaleX(0.3)", transition:"opacity 0.6s ease, transform 0.6s ease" }}>
           <div className="flex-1 h-px bg-gradient-to-r from-transparent to-olive/50" />
-          <div className="w-1.5 h-1.5 rounded-full bg-olive/70" />
+          <div style={{ width:6, height:6, borderRadius:"50%", background:"rgba(139,133,85,0.7)" }} />
           <div className="flex-1 h-px bg-gradient-to-l from-transparent to-olive/50" />
         </div>
 
-        {/* Tagline */}
-        <div
-          className="mb-4"
-          style={{
-            opacity: phase >= 2 ? 1 : 0,
-            transform: phase >= 2 ? "none" : "translateY(12px)",
-            transition: "opacity 0.6s ease, transform 0.6s ease",
-          }}
-        >
+        <div className="mb-4"
+          style={{ opacity:phase>=2?1:0, transform:phase>=2?"none":"translateY(12px)", transition:"opacity 0.6s ease, transform 0.6s ease" }}>
           <span className="font-inter text-[11px] text-olive/80 tracking-[0.45em] uppercase">
             {BUSINESS.tagline}
           </span>
         </div>
 
-        {/* Slogan */}
-        <div
-          className="mb-10"
-          style={{
-            opacity: phase >= 3 ? 1 : 0,
-            transform: phase >= 3 ? "none" : "translateY(16px)",
-            transition: "opacity 0.7s ease, transform 0.7s ease",
-          }}
-        >
+        <div className="mb-10"
+          style={{ opacity:phase>=3?1:0, transform:phase>=3?"none":"translateY(16px)", transition:"opacity 0.7s ease, transform 0.7s ease" }}>
           <p className="font-playfair italic text-xl sm:text-2xl md:text-3xl text-white/70 tracking-wide">
             {BUSINESS.slogan}
           </p>
         </div>
 
-        {/* CTAs */}
-        <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          style={{
-            opacity: phase >= 4 ? 1 : 0,
-            transform: phase >= 4 ? "none" : "translateY(20px)",
-            transition: "opacity 0.7s ease, transform 0.7s ease",
-          }}
-        >
-          <Button
-            href={BUSINESS.inbarberUrl}
-            target="_blank"
-            size="lg"
-            className="bg-olive text-white hover:bg-olive-light border-0 shadow-[0_4px_28px_rgba(139,133,85,0.5)] hover:shadow-[0_6px_36px_rgba(139,133,85,0.7)] transition-shadow"
-          >
-            AGENDAR HORÃRIO
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          style={{ opacity:phase>=4?1:0, transform:phase>=4?"none":"translateY(20px)", transition:"opacity 0.7s ease, transform 0.7s ease" }}>
+          <Button href={BUSINESS.inbarberUrl} target="_blank" size="lg"
+            className="bg-olive text-white hover:bg-olive-light border-0 shadow-[0_4px_28px_rgba(139,133,85,0.5)]">
+            AGENDAR HORÁRIO
           </Button>
-          <Button
-            href="#espaco"
-            size="lg"
-            variant="outline"
-            className="border-white/50 text-white hover:bg-white hover:text-forest"
-          >
-            CONHECER O ESPAÃ‡O
+          <Button href="#espaco" size="lg" variant="outline"
+            className="border-white/50 text-white hover:bg-white hover:text-forest">
+            CONHECER O ESPAÇO
           </Button>
         </div>
 
-        <div
-          className="mt-6"
-          style={{
-            opacity: phase >= 4 ? 0.45 : 0,
-            transition: "opacity 1s ease 0.4s",
-          }}
-        >
+        <div className="mt-6" style={{ opacity:phase>=4?0.45:0, transition:"opacity 1s ease 0.4s" }}>
           <span className="font-inter text-xs text-white/55 tracking-widest">
-            BethÃ¢nia, Ipatinga â€” MG
+            Bethânia, Ipatinga — MG
           </span>
         </div>
       </div>
 
-      {/* seta scroll */}
-      <a
-        href="#stats"
+      <a href="#stats"
         className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/30 hover:text-white/70 transition-colors"
-        style={{ animation: "bounce 2s ease-in-out infinite" }}
-        aria-label="Ver mais"
-      >
+        style={{ animation:"bounce 2s ease-in-out infinite" }} aria-label="Ver mais">
         <ChevronDown size={26} />
       </a>
 
-      {/* keyframes inline â€” sem depender do tailwind */}
       <style>{`
-        @keyframes haloglow {
-          0%,100% { opacity: 0.6; transform: scale(1); }
-          50%      { opacity: 1;   transform: scale(1.12); }
-        }
-        @keyframes flashOnce {
-          0%   { opacity: 1; transform: scale(0.8); }
-          40%  { opacity: 0.9; transform: scale(1.15); }
-          100% { opacity: 0; transform: scale(1.5); }
-        }
-        @keyframes particleFloat {
-          0%,100% { opacity:0; transform: translateY(0) scale(1); }
-          20%      { opacity:0.8; }
-          50%      { opacity:0.4; transform: translateY(-18px) scale(1.4); }
-          80%      { opacity:0.7; }
-        }
-        @keyframes bounce {
-          0%,100% { transform: translateX(-50%) translateY(0); }
-          50%      { transform: translateX(-50%) translateY(8px); }
-        }
+        @keyframes haloglow { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.12)} }
+        @keyframes flashOnce { 0%{opacity:1;transform:scale(.8)} 40%{opacity:.9;transform:scale(1.15)} 100%{opacity:0;transform:scale(1.5)} }
+        @keyframes particleFloat { 0%,100%{opacity:0;transform:translateY(0) scale(1)} 20%{opacity:.8} 50%{opacity:.4;transform:translateY(-18px) scale(1.4)} 80%{opacity:.7} }
+        @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
       `}</style>
     </section>
   )
