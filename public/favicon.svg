@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <circle cx="24" cy="24" r="22" fill="#C9A84C" stroke="#8B6914" stroke-width="2"/>
+  <circle cx="24" cy="24" r="18" fill="#0A0705"/>
+  <text x="24" y="20" font-family="serif" font-size="7" font-weight="bold" fill="#C9A84C" text-anchor="middle" letter-spacing="2">BARBEZA</text>
+  <text x="24" y="30" font-family="serif" font-size="4.5" fill="#C9A84C" text-anchor="middle" letter-spacing="1">BARBEARIA</text>
+  <circle cx="24" cy="24" r="1.5" fill="#C9A84C"/>
+</svg>

@@ -1,0 +1,94 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===================== CUSTOM CURSOR ===================== */
+@media (pointer: fine) {
+  * { cursor: url("/cursor-scissor.svg") 16 16, auto !important; }
+  a, button, [role="button"], input[type="submit"], select, label[for] {
+    cursor: url("/cursor-scissor-pointer.svg") 16 16, pointer !important;
+  }
+}
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0D0D08; }
+::-webkit-scrollbar-thumb { background: #8B8555; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #A8A270; }
+
+/* ===================== BASE ===================== */
+html { scroll-behavior: smooth; }
+body {
+  background-color: #0D0D08;
+  color: #F5F5F0;
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+}
+
+/* ===================== TYPOGRAPHY ===================== */
+.font-oswald { font-family: "Oswald", sans-serif; }
+.font-playfair { font-family: "Playfair Display", serif; }
+
+/* ===================== BRAND SHIMMER TEXT ===================== */
+.text-brand-shimmer {
+  background: linear-gradient(90deg, #5C5838 0%, #8B8555 30%, #C4C09A 50%, #8B8555 70%, #5C5838 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ===================== GLASS CARD ===================== */
+.glass-card {
+  background: rgba(30, 30, 20, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 133, 85, 0.18);
+}
+
+/* ===================== SECTION BASE ===================== */
+.section-padding { @apply py-20 md:py-28 lg:py-32; }
+
+/* ===================== VIDEO PLACEHOLDER ===================== */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.video-placeholder {
+  background: linear-gradient(-45deg, #0D0D08, #161610, #1E1E14, #141408);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* ===================== PARTICLES ===================== */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, #C4C09A, #8B8555);
+}
+
+/* ===================== SELECTION ===================== */
+::selection { background: rgba(139, 133, 85, 0.35); color: #F5F5F0; }
+
+/* ===================== FOCUS ===================== */
+*:focus-visible { outline: 2px solid #8B8555; outline-offset: 2px; }
+
+/* ===================== UTILITY ===================== */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.aspect-square { aspect-ratio: 1 / 1; }
+.aspect-video { aspect-ratio: 16 / 9; }
+
+/* ===================== LOGO BRAND MARK ===================== */
+.logo-mark {
+  background-color: #8B8555;
+  border-radius: 50%;
+  padding: 4px;
+}
