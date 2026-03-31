@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+﻿import { useEffect, useRef, useState } from "react"
 import { BUSINESS } from "@/data/content"
 import { Button } from "@/components/ui/Button"
 import { ChevronDown } from "lucide-react"
@@ -21,7 +21,7 @@ export function HeroSection() {
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-forest-deep">
 
-      {/* ── Background ── */}
+      {/* â”€â”€ Background â”€â”€ */}
       <div className="absolute inset-0">
         <img
           src="/assets/images/hero-bg.gif"
@@ -40,13 +40,13 @@ export function HeroSection() {
         </video>
       </div>
 
-      {/* ── Overlays ── */}
+      {/* â”€â”€ Overlays â”€â”€ */}
       <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/80 via-forest-deep/50 to-forest-deep/95" />
       <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/45 to-transparent" />
       {/* linha oliva esquerda */}
       <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-olive/70 to-transparent" />
 
-      {/* ── Partículas de brilho ── */}
+      {/* â”€â”€ PartÃ­culas de brilho â”€â”€ */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {[
           {top:"15%",left:"8%",  size:3, delay:"0s",   dur:"4s"  },
@@ -66,10 +66,10 @@ export function HeroSection() {
         ))}
       </div>
 
-      {/* ── Conteúdo central ── */}
+      {/* â”€â”€ ConteÃºdo central â”€â”€ */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto flex flex-col items-center">
 
-        {/* LOGO — grande, chamativa, com glow animado */}
+        {/* LOGO â€” grande, chamativa, com glow animado */}
         <div
           className="mb-8 relative"
           style={{
@@ -78,7 +78,7 @@ export function HeroSection() {
             transition: "opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1)",
           }}
         >
-          {/* halo pulsante atrás da logo */}
+          {/* halo pulsante atrÃ¡s da logo */}
           <div
             className="absolute inset-0 -m-6 rounded-full pointer-events-none"
             style={{
@@ -86,7 +86,7 @@ export function HeroSection() {
               animation: phase >= 1 ? "haloglow 3s ease-in-out infinite" : "none",
             }}
           />
-          {/* flash único na entrada */}
+          {/* flash Ãºnico na entrada */}
           {phase >= 1 && (
             <div
               className="absolute inset-0 -m-8 rounded-full pointer-events-none"
@@ -101,13 +101,13 @@ export function HeroSection() {
             alt="Barbeza Barbearia"
             className="relative w-auto object-contain"
             style={{
-              height: "clamp(90px, 14vw, 160px)",
+              height: "clamp(180px, 28vw, 320px)",
               filter: "drop-shadow(0 6px 32px rgba(139,133,85,0.6)) drop-shadow(0 0 60px rgba(139,133,85,0.25))",
             }}
           />
         </div>
 
-        {/* linha divisória oliva */}
+        {/* linha divisÃ³ria oliva */}
         <div
           className="flex items-center gap-4 mb-6 w-full max-w-xs"
           style={{
@@ -164,7 +164,7 @@ export function HeroSection() {
             size="lg"
             className="bg-olive text-white hover:bg-olive-light border-0 shadow-[0_4px_28px_rgba(139,133,85,0.5)] hover:shadow-[0_6px_36px_rgba(139,133,85,0.7)] transition-shadow"
           >
-            AGENDAR HORÁRIO
+            AGENDAR HORÃRIO
           </Button>
           <Button
             href="#espaco"
@@ -172,7 +172,7 @@ export function HeroSection() {
             variant="outline"
             className="border-white/50 text-white hover:bg-white hover:text-forest"
           >
-            CONHECER O ESPAÇO
+            CONHECER O ESPAÃ‡O
           </Button>
         </div>
 
@@ -184,7 +184,7 @@ export function HeroSection() {
           }}
         >
           <span className="font-inter text-xs text-white/55 tracking-widest">
-            Bethânia, Ipatinga — MG
+            BethÃ¢nia, Ipatinga â€” MG
           </span>
         </div>
       </div>
@@ -199,7 +199,7 @@ export function HeroSection() {
         <ChevronDown size={26} />
       </a>
 
-      {/* keyframes inline — sem depender do tailwind */}
+      {/* keyframes inline â€” sem depender do tailwind */}
       <style>{`
         @keyframes haloglow {
           0%,100% { opacity: 0.6; transform: scale(1); }
