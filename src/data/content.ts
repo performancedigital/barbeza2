@@ -14,6 +14,7 @@ export const BUSINESS = {
   inbarberUrl: 'https://chat.inbarberapp.com/AGENDABARBEZA',
   googleMapsUrl: 'https://maps.google.com/maps?q=Avenida+Selim+Jose+de+Sales+Bethania+Ipatinga+MG&output=embed',
   googleMapsLink: 'https://maps.google.com/?q=Avenida+Selim+Jose+de+Sales+Bethania+Ipatinga+MG',
+  googleReviewUrl: 'https://g.page/r/CZO_I9XVXZ6LEAI/review',
 } as const
 
 export const SERVICES: Service[] = [
@@ -50,10 +51,10 @@ export const TESTIMONIALS: Testimonial[] = [
 ]
 
 export const STATS: Stat[] = [
-  { label: 'Seguidores',          value: 1199, suffix: '+',  prefix: ''   },
-  { label: 'Clientes Atendidos',  value: 500,  suffix: '+',  prefix: ''   },
-  { label: 'Avaliação',           value: 5,    suffix: '.0', prefix: '★ ' },
-  { label: 'Anos de Experiência', value: 3,    suffix: '+',  prefix: ''   },
+  { label: 'Certificações',       value: 10,   suffix: '+',  prefix: ''   },
+  { label: 'Clientes Atendidos',  value: 1000, suffix: '+',  prefix: ''   },
+  { label: 'Avaliação Google',    value: 5,    suffix: '.0', prefix: '★ ', link: 'https://g.page/r/CZO_I9XVXZ6LEAI/review' },
+  { label: 'Anos de Experiência', value: 10,   suffix: '+',  prefix: ''   },
 ]
 
 export const SPACE_ROOMS: SpaceRoom[] = [
