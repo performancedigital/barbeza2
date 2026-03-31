@@ -44,7 +44,7 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-dark flex flex-col md:flex-row">
+    <div className="min-h-screen bg-natural-alt flex flex-col md:flex-row">
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col w-60 bg-natural-alt border-r border-natural-border">
         {/* Brand */}

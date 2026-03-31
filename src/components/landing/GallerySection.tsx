@@ -1,17 +1,29 @@
 import { useState } from "react"
 import { GALLERY } from "@/data/content"
+import type { GalleryItem } from "@/types"
 import { GoldDivider } from "@/components/ui/GoldDivider"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
+
+function loadGalleryData(): GalleryItem[] {
+  try {
+    const s = localStorage.getItem('barbeza-gallery')
+    return s ? (JSON.parse(s) as GalleryItem[]) : GALLERY
+  } catch { return GALLERY }
+}
+
 const CATS = [
-  { key: "all",     label: "Todos"    },
-  { key: "cortes",  label: "Cortes"   },
-  { key: "barbas",  label: "Barbas"   },
-  { key: "ambiente",label: "Ambiente" },
+  { key: "all",      label: "Todos"    },
+  { key: "cortes",   label: "Cortes"   },
+  { key: "barbas",   label: "Barbas"   },
+  { key: "ambiente", label: "Ambiente" },
 ]
+
 export function GallerySection() {
   const [cat, setCat] = useState("all")
   const { ref, isVisible } = useScrollAnimation(0.1)
-  const filtered = cat === "all" ? GALLERY : GALLERY.filter(g => g.category === cat)
+  const gallery = loadGalleryData()
+  const filtered = cat === "all" ? gallery : gallery.filter((g: GalleryItem) => g.category === cat)
+
   return (
     <section id="galeria" className="section-padding bg-natural">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -31,7 +43,7 @@ export function GallerySection() {
           ))}
         </div>
         <div ref={ref} className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {filtered.map((item, i) => (
+          {filtered.map((item: GalleryItem, i: number) => (
             <div key={item.id} className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer"
               style={{ opacity:isVisible?1:0, transform:isVisible?"none":"scale(0.95)", transition:`all 0.5s ease ${i*80}ms` }}>
               <img src={item.file} alt={item.alt}
