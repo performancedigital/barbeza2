@@ -37,7 +37,6 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/45 to-transparent" />
       <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-olive/70 to-transparent" />
 
-      {/* Particulas */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {[
           {top:"15%",left:"8%",  s:3, d:"0s",   r:"4s"  },
@@ -55,7 +54,7 @@ export function HeroSection() {
 
       <div className="relative z-10 text-center px-6 max-w-3xl mx-auto flex flex-col items-center">
 
-        {/* LOGO vertical branca — tamanho proporcional */}
+        {/* LOGO — novo arquivo logo-hero.png, tamanho reduzido */}
         <div className="mb-8 relative"
           style={{
             opacity: phase >= 1 ? 1 : 0,
@@ -74,11 +73,11 @@ export function HeroSection() {
             animation:"flashOnce 1.2s ease-out forwards",
           }} />}
           <img
-            src="/assets/logo/logo-horizontal-branca.png"
+            src="/assets/logo/logo-hero.png"
             alt="Barbeza Barbearia"
             style={{
               position:"relative",
-              height: "clamp(160px, 22vw, 240px)",
+              height: "clamp(100px, 14vw, 160px)",
               width: "auto",
               maxWidth: "80vw",
               objectFit: "contain",
