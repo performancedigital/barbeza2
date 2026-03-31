@@ -46,14 +46,14 @@ export function DashboardPage() {
   return (
     <div className="min-h-screen bg-dark flex flex-col md:flex-row">
       {/* Sidebar */}
-      <aside className="hidden md:flex flex-col w-60 bg-dark-surface border-r border-dark-border">
+      <aside className="hidden md:flex flex-col w-60 bg-natural-alt border-r border-natural-border">
         {/* Brand */}
-        <div className="px-6 py-6 border-b border-dark-border">
+        <div className="px-6 py-6 border-b border-natural-border">
           <a href="/" className="flex items-center gap-2 group">
             <img src="/favicon.svg" alt="Barbeza" className="w-8 h-8" />
             <div>
-              <p className="font-oswald text-brand text-xs font-bold tracking-widest">BARBEZA</p>
-              <p className="font-inter text-[9px] text-cream-muted tracking-wider">ADMIN</p>
+              <p className="font-raleway text-forest text-xs font-bold tracking-widest">BARBEZA</p>
+              <p className="font-inter text-[9px] text-ink-muted tracking-wider">ADMIN</p>
             </div>
           </a>
         </div>
@@ -66,8 +66,8 @@ export function DashboardPage() {
               onClick={() => setTab(id)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded text-sm transition-all duration-200 ${
                 tab === id
-                  ? 'bg-brand/10 text-brand border-l-2 border-brand'
-                  : 'text-cream-muted hover:text-cream hover:bg-dark-card'
+                  ? 'bg-forest/10 text-forest border-l-2 border-forest'
+                  : 'text-ink-muted hover:text-ink hover:bg-natural'
               }`}
             >
               <Icon size={16} />
@@ -78,8 +78,8 @@ export function DashboardPage() {
         </nav>
 
         {/* Logout */}
-        <div className="px-3 pb-6 border-t border-dark-border pt-4">
-          <a href="/" className="flex items-center gap-3 px-3 py-2 text-sm text-cream-muted hover:text-brand transition-colors">
+        <div className="px-3 pb-6 border-t border-natural-border pt-4">
+          <a href="/" className="flex items-center gap-3 px-3 py-2 text-sm text-ink-muted hover:text-forest transition-colors">
             <ChevronRight size={14} className="rotate-180" />
             <span className="font-inter">Ver Site</span>
           </a>
@@ -91,19 +91,19 @@ export function DashboardPage() {
       </aside>
 
       {/* Mobile header */}
-      <div className="md:hidden bg-dark-surface border-b border-dark-border px-4 py-3 flex items-center justify-between">
-        <p className="font-oswald text-brand text-sm tracking-widest">BARBEZA ADMIN</p>
-        <button onClick={() => setMobileNav(n => !n)} className="text-cream-muted">
+      <div className="md:hidden bg-natural-alt border-b border-natural-border px-4 py-3 flex items-center justify-between">
+        <p className="font-raleway text-forest text-sm tracking-widest">BARBEZA ADMIN</p>
+        <button onClick={() => setMobileNav(n => !n)} className="text-ink-muted">
           {TABS.find(t => t.id === tab)?.label || 'Menu'}
         </button>
       </div>
 
       {/* Mobile nav */}
       {mobileNav && (
-        <div className="md:hidden bg-dark-surface border-b border-dark-border px-4 py-2 flex flex-wrap gap-2">
+        <div className="md:hidden bg-natural-alt border-b border-natural-border px-4 py-2 flex flex-wrap gap-2">
           {TABS.map(({ id, label }) => (
             <button key={id} onClick={() => { setTab(id); setMobileNav(false) }}
-              className={`px-3 py-1.5 text-xs font-oswald tracking-wider border transition-colors ${tab === id ? 'border-brand bg-brand/10 text-brand' : 'border-dark-border text-cream-muted'}`}>
+              className={`px-3 py-1.5 text-xs font-raleway tracking-wider border transition-colors ${tab === id ? 'border-forest bg-forest/10 text-forest' : 'border-natural-border text-ink-muted'}`}>
               {label}
             </button>
           ))}
@@ -119,4 +119,5 @@ export function DashboardPage() {
     </div>
   )
 }
+
 

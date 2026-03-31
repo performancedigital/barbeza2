@@ -23,13 +23,13 @@ export function DashboardLogin({ onAuth }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-dark flex items-center justify-center px-4">
+    <div className="min-h-screen bg-natural-alt flex items-center justify-center px-4">
       <div className="glass-card rounded-xl p-10 w-full max-w-sm text-center">
-        <div className="w-14 h-14 rounded-full border border-brand/30 flex items-center justify-center mx-auto mb-6">
-          <Lock size={22} className="text-brand" />
+        <div className="w-14 h-14 rounded-full border border-forest/30 flex items-center justify-center mx-auto mb-6">
+          <Lock size={22} className="text-forest" />
         </div>
-        <h1 className="font-oswald text-brand text-lg tracking-widest mb-1">BARBEZA</h1>
-        <p className="font-inter text-xs text-cream-muted mb-8 tracking-wider">PAINEL ADMINISTRATIVO</p>
+        <h1 className="font-raleway text-forest text-lg tracking-widest mb-1">BARBEZA</h1>
+        <p className="font-inter text-xs text-ink-muted mb-8 tracking-wider">PAINEL ADMINISTRATIVO</p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
@@ -38,14 +38,14 @@ export function DashboardLogin({ onAuth }: Props) {
             onChange={e => setInput(e.target.value)}
             placeholder="Senha"
             autoFocus
-            className={`w-full bg-dark-card border rounded px-4 py-3 font-inter text-sm text-cream placeholder-cream-muted/40 outline-none focus:border-brand transition-colors ${
-              error ? 'border-red-500' : 'border-dark-border'
+            className={`w-full bg-natural border rounded px-4 py-3 font-inter text-sm text-ink placeholder-cream-muted/40 outline-none focus:border-forest transition-colors ${
+              error ? 'border-red-500' : 'border-natural-border'
             }`}
           />
           {error && <p className="font-inter text-xs text-red-400">Senha incorreta</p>}
           <button
             type="submit"
-            className="w-full bg-brand text-dark font-oswald text-xs tracking-widest py-3 hover:bg-brand-light transition-colors"
+            className="w-full bg-forest text-dark font-raleway text-xs tracking-widest py-3 hover:bg-forest-light transition-colors"
           >
             ENTRAR
           </button>
@@ -54,4 +54,6 @@ export function DashboardLogin({ onAuth }: Props) {
     </div>
   )
 }
+
+
 

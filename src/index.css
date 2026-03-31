@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===================== CUSTOM CURSOR ===================== */
+/* ===================== CURSOR ===================== */
 @media (pointer: fine) {
   * { cursor: url("/cursor-scissor.svg") 16 16, auto !important; }
   a, button, [role="button"], input[type="submit"], select, label[for] {
@@ -12,26 +12,17 @@
 
 /* ===================== SCROLLBAR ===================== */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0D0D08; }
-::-webkit-scrollbar-thumb { background: #8B8555; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #A8A270; }
+::-webkit-scrollbar-track { background: #F0EDE5; }
+::-webkit-scrollbar-thumb { background: #3D5A3D; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #4E7A4E; }
 
 /* ===================== BASE ===================== */
 html { scroll-behavior: smooth; }
-body {
-  background-color: #0D0D08;
-  color: #F5F5F0;
-  font-family: "Inter", sans-serif;
-  overflow-x: hidden;
-}
+body { background-color: #FAFAF5; color: #1A2A1A; font-family: "Inter", sans-serif; overflow-x: hidden; }
 
-/* ===================== TYPOGRAPHY ===================== */
-.font-oswald { font-family: "Oswald", sans-serif; }
-.font-playfair { font-family: "Playfair Display", serif; }
-
-/* ===================== BRAND SHIMMER TEXT ===================== */
-.text-brand-shimmer {
-  background: linear-gradient(90deg, #5C5838 0%, #8B8555 30%, #C4C09A 50%, #8B8555 70%, #5C5838 100%);
+/* ===================== SHIMMER ===================== */
+.text-forest-shimmer {
+  background: linear-gradient(90deg, #2A3D2A 0%, #3D5A3D 30%, #8B8555 50%, #3D5A3D 70%, #2A3D2A 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -39,56 +30,54 @@ body {
   animation: shimmer 3s linear infinite;
 }
 
-/* ===================== GLASS CARD ===================== */
+/* ===================== GLASS (dark sections) ===================== */
 .glass-card {
-  background: rgba(30, 30, 20, 0.7);
+  background: rgba(255,255,255,0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(139, 133, 85, 0.18);
+  border: 1px solid rgba(61,90,61,0.15);
+}
+.glass-card-dark {
+  background: rgba(30,46,30,0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* ===================== SECTION BASE ===================== */
+/* ===================== SECTION PADDING ===================== */
 .section-padding { @apply py-20 md:py-28 lg:py-32; }
 
 /* ===================== VIDEO PLACEHOLDER ===================== */
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 .video-placeholder {
-  background: linear-gradient(-45deg, #0D0D08, #161610, #1E1E14, #141408);
+  background: linear-gradient(-45deg, #0F1A0F, #162316, #1E2E1E, #0A120A);
   background-size: 400% 400%;
   animation: gradientShift 8s ease infinite;
 }
 
 /* ===================== PARTICLES ===================== */
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  background: radial-gradient(circle, #C4C09A, #8B8555);
-}
+.particle { position:absolute; border-radius:50%; pointer-events:none; background:radial-gradient(circle,#8B8555,#3D5A3D); }
 
 /* ===================== SELECTION ===================== */
-::selection { background: rgba(139, 133, 85, 0.35); color: #F5F5F0; }
+::selection { background: rgba(61,90,61,0.25); color: #1A2A1A; }
 
 /* ===================== FOCUS ===================== */
-*:focus-visible { outline: 2px solid #8B8555; outline-offset: 2px; }
+*:focus-visible { outline: 2px solid #3D5A3D; outline-offset: 2px; }
 
-/* ===================== UTILITY ===================== */
-.line-clamp-2 {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+/* ===================== CARD LIGHT ===================== */
+.card-natural {
+  background: #FFFFFF;
+  border: 1px solid #D8D5C8;
+  transition: box-shadow 0.3s, border-color 0.3s;
 }
+.card-natural:hover {
+  box-shadow: 0 8px 40px rgba(61,90,61,0.12);
+  border-color: rgba(61,90,61,0.3);
+}
+
 .aspect-square { aspect-ratio: 1 / 1; }
-.aspect-video { aspect-ratio: 16 / 9; }
-
-/* ===================== LOGO BRAND MARK ===================== */
-.logo-mark {
-  background-color: #8B8555;
-  border-radius: 50%;
-  padding: 4px;
-}
+.aspect-video  { aspect-ratio: 16 / 9; }

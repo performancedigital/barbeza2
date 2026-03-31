@@ -1,57 +1,44 @@
 ﻿import { useEffect, useState } from "react"
 import { BUSINESS } from "@/data/content"
-
 const LETTERS = "BARBEZA".split("")
-
-export function LoadingScreen({ onDone }: { onDone: () => void }) {
-  const [visibleLetters, setVisibleLetters] = useState(0)
+export function LoadingScreen({ onDone }: { onDone:()=>void }) {
+  const [vis, setVis] = useState(0)
   const [showLogo, setShowLogo] = useState(false)
   const [fading, setFading] = useState(false)
-
   useEffect(() => {
     const seen = sessionStorage.getItem("barbeza-loaded")
     if (seen) { onDone(); return }
     let i = 0
-    const interval = setInterval(() => {
-      i++
-      setVisibleLetters(i)
+    const t = setInterval(() => {
+      i++; setVis(i)
       if (i >= LETTERS.length) {
-        clearInterval(interval)
+        clearInterval(t)
         setTimeout(() => setShowLogo(true), 200)
         setTimeout(() => setFading(true), 1800)
-        setTimeout(() => { sessionStorage.setItem("barbeza-loaded", "1"); onDone() }, 2400)
+        setTimeout(() => { sessionStorage.setItem("barbeza-loaded","1"); onDone() }, 2400)
       }
     }, 120)
-    return () => clearInterval(interval)
+    return () => clearInterval(t)
   }, [onDone])
-
   return (
-    <div className={`fixed inset-0 z-[9998] bg-dark flex flex-col items-center justify-center transition-opacity duration-500 ${fading ? "opacity-0" : "opacity-100"}`}>
-      <div className="absolute inset-0 bg-gradient-radial from-brand/10 to-transparent opacity-20" />
-
-      {/* Animated letters */}
+    <div className={`fixed inset-0 z-[9998] bg-forest-deep flex flex-col items-center justify-center transition-opacity duration-500 ${fading?"opacity-0":"opacity-100"}`}>
       <div className="flex items-end gap-1 md:gap-2 mb-4">
-        {LETTERS.map((letter, idx) => (
-          <span key={idx} className="font-oswald font-bold text-5xl md:text-8xl transition-all duration-300"
-            style={{ color: "#8B8555", opacity: idx < visibleLetters ? 1 : 0, transform: idx < visibleLetters ? "translateY(0)" : "translateY(20px)", textShadow: idx < visibleLetters ? "0 0 40px rgba(139,133,85,0.5)" : "none" }}>
-            {letter}
+        {LETTERS.map((l,i) => (
+          <span key={i} className="font-raleway font-black text-5xl md:text-8xl transition-all duration-300"
+            style={{ color:"#F5F5F0", opacity:i<vis?1:0, transform:i<vis?"translateY(0)":"translateY(20px)", textShadow:i<vis?"0 0 40px rgba(139,133,85,0.6)":"none" }}>
+            {l}
           </span>
         ))}
       </div>
-
-      <p className="font-playfair italic text-cream-muted text-sm md:text-lg tracking-[0.4em] transition-all duration-700" style={{ opacity: visibleLetters >= LETTERS.length ? 1 : 0 }}>
+      <p className="font-playfair italic text-white/50 text-sm md:text-lg tracking-[0.4em] transition-all duration-700" style={{ opacity:vis>=LETTERS.length?1:0 }}>
         {BUSINESS.slogan}
       </p>
-
       {showLogo && (
-        <div className="mt-10">
-          <div className="w-16 h-16 rounded-full bg-brand flex items-center justify-center animate-pulse-brand shadow-[0_0_30px_rgba(139,133,85,0.5)]">
-            <img src="/assets/logo/logo.png" alt="Barbeza" className="w-14 h-14 object-contain" />
-          </div>
+        <div className="mt-8">
+          <img src="/assets/logo/logo-horizontal-branca.png" alt="Barbeza" className="h-10 w-auto object-contain opacity-0 animate-fade-in" style={{ animationFillMode:"forwards" }} />
         </div>
       )}
-
-      <div className="absolute bottom-0 left-0 h-[2px] bg-brand-gradient transition-all duration-1000" style={{ width: `${(visibleLetters / LETTERS.length) * 100}%` }} />
+      <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-forest to-olive transition-all duration-1000" style={{ width:`${(vis/LETTERS.length)*100}%` }} />
     </div>
   )
 }

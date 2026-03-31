@@ -22,7 +22,7 @@ export function HoursManager() {
 
   return (
     <div>
-      <h2 className="font-oswald text-brand text-lg tracking-widest mb-6">HORÁRIOS DE FUNCIONAMENTO</h2>
+      <h2 className="font-raleway text-forest text-lg tracking-widest mb-6">HORÁRIOS DE FUNCIONAMENTO</h2>
       <div className="flex flex-col gap-3">
         {Object.entries(hours).map(([key, day]) => (
           <div key={key} className="glass-card rounded-lg p-4 flex flex-col sm:flex-row sm:items-center gap-4">
@@ -33,26 +33,26 @@ export function HoursManager() {
                 onChange={e => update(key, 'active', e.target.checked)}
                 className="w-4 h-4 accent-[#C9A84C]"
               />
-              <span className="font-inter text-sm text-cream">{day.label}</span>
+              <span className="font-inter text-sm text-ink">{day.label}</span>
             </div>
             {day.active ? (
               <div className="flex items-center gap-3 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-inter text-xs text-cream-muted">Abre:</span>
+                  <span className="font-inter text-xs text-ink-muted">Abre:</span>
                   <input
                     type="time"
                     value={day.open}
                     onChange={e => update(key, 'open', e.target.value)}
-                    className="bg-dark-card border border-dark-border rounded px-2 py-1 text-sm text-cream"
+                    className="bg-natural border border-natural-border rounded px-2 py-1 text-sm text-ink"
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-inter text-xs text-cream-muted">Fecha:</span>
+                  <span className="font-inter text-xs text-ink-muted">Fecha:</span>
                   <input
                     type="time"
                     value={day.close}
                     onChange={e => update(key, 'close', e.target.value)}
-                    className="bg-dark-card border border-dark-border rounded px-2 py-1 text-sm text-cream"
+                    className="bg-natural border border-natural-border rounded px-2 py-1 text-sm text-ink"
                   />
                 </div>
               </div>
@@ -66,4 +66,5 @@ export function HoursManager() {
     </div>
   )
 }
+
 
