@@ -12,10 +12,10 @@ function loadGalleryData(): GalleryItem[] {
 }
 
 const CATS = [
-  { key: "all",      label: "Todos"    },
-  { key: "cortes",   label: "Cortes"   },
-  { key: "barbas",   label: "Barbas"   },
-  { key: "ambiente", label: "Ambiente" },
+  { key: "all",       label: "Todos"    },
+  { key: "cortes",    label: "Cortes"   },
+  { key: "barbas",    label: "Barbas"   },
+  { key: "ambiente",  label: "Ambiente" },
 ]
 
 export function GallerySection() {
@@ -32,6 +32,7 @@ export function GallerySection() {
           <h2 className="font-raleway font-black text-4xl md:text-5xl text-ink mb-4">Galeria</h2>
           <GoldDivider className="max-w-xs mx-auto"/>
         </div>
+
         <div className="flex items-center justify-center gap-3 flex-wrap mb-10">
           {CATS.map(c => (
             <button key={c.key} onClick={() => setCat(c.key)}
@@ -39,34 +40,59 @@ export function GallerySection() {
                 c.key === cat
                   ? "bg-forest text-white border-forest"
                   : "border-natural-border text-ink-muted hover:border-forest hover:text-forest"
-              }`}>{c.label}</button>
+              }`}>
+              {c.label}
+            </button>
           ))}
         </div>
+
         <div ref={ref} className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {filtered.map((item: GalleryItem, i: number) => (
-            <div key={item.id} className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer"
-              style={{ opacity:isVisible?1:0, transform:isVisible?"none":"scale(0.95)", transition:`all 0.5s ease ${i*80}ms` }}>
-              <img src={item.file} alt={item.alt}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                onError={(e) => { (e.target as HTMLImageElement).style.display="none" }}/>
-              <div className="absolute inset-0 bg-forest-deep flex items-center justify-center">
+            <div
+              key={item.id}
+              className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer bg-forest/10"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? "none" : "scale(0.95)",
+                transition: `all 0.5s ease ${i * 80}ms`,
+              }}
+            >
+              {/* Placeholder — fica ATRÁS (z-0), visível apenas quando a imagem falha */}
+              <div className="absolute inset-0 z-0 flex items-center justify-center bg-forest/8">
                 <div className="text-center p-4">
-                  <div className="w-10 h-10 rounded-full bg-forest/20 border border-forest/30 flex items-center justify-center mx-auto mb-2">
-                    <svg viewBox="0 0 24 24" className="w-5 h-5 text-white/60" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                      <circle cx="8.5" cy="8.5" r="1.5"/>
-                      <polyline points="21 15 16 10 5 21"/>
-                    </svg>
-                  </div>
-                  <p className="font-inter text-white/50 text-[10px]">{item.alt}</p>
+                  <svg viewBox="0 0 24 24" className="w-8 h-8 text-forest/30 mx-auto mb-1" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  <p className="font-inter text-forest/30 text-[9px]">{item.alt}</p>
                 </div>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                <p className="font-inter text-white text-xs font-medium">{item.alt}</p>
+
+              {/* Imagem — fica NA FRENTE (z-10), cobre o placeholder quando carrega */}
+              <img
+                src={item.file}
+                alt={item.alt}
+                className="absolute inset-0 z-10 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onError={(e) => {
+                  // Esconde a imagem, deixa o placeholder aparecer
+                  (e.target as HTMLImageElement).style.display = "none"
+                }}
+              />
+
+              {/* Hover overlay — acima de tudo (z-20) */}
+              <div className="absolute inset-0 z-20 bg-gradient-to-t from-forest-deep/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                <p className="font-inter text-white text-xs font-medium drop-shadow">{item.alt}</p>
               </div>
             </div>
           ))}
         </div>
+
+        {filtered.length === 0 && (
+          <p className="font-inter text-ink-muted/50 text-sm text-center py-12">
+            Nenhuma foto nesta categoria.
+          </p>
+        )}
       </div>
     </section>
   )
