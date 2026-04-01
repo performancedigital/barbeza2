@@ -1,13 +1,26 @@
 import { Scissors, Smile, Sparkles, Crown, type LucideProps } from "lucide-react"
 import { type ForwardRefExoticComponent, type RefAttributes } from "react"
 import { SERVICES, BUSINESS } from "@/data/content"
+import type { Service } from "@/types"
 import { Button } from "@/components/ui/Button"
 import { GoldDivider } from "@/components/ui/GoldDivider"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
+
 type LucideIcon = ForwardRefExoticComponent<LucideProps & RefAttributes<SVGSVGElement>>
 const ICONS: Record<string,LucideIcon> = { Scissors, Smile, Sparkles, Crown }
+
+function loadServices(): Service[] {
+  try {
+    const s = localStorage.getItem('barbeza-services')
+    return s ? (JSON.parse(s) as Service[]) : SERVICES
+  } catch { return SERVICES }
+}
+
 export function ServicesSection() {
   const { ref, isVisible } = useScrollAnimation(0.1)
+  const services = loadServices()
+  const waText = encodeURIComponent('Olá! Gostaria de solicitar um orçamento para o Making Of do Noivo.')
+
   return (
     <section id="servicos" className="section-padding bg-natural">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -17,7 +30,7 @@ export function ServicesSection() {
           <GoldDivider icon="scissor" className="max-w-xs mx-auto"/>
         </div>
         <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SERVICES.map((sv,i) => {
+          {services.map((sv, i) => {
             const Icon = ICONS[sv.icon] || Scissors
             return (
               <div key={sv.id} className="card-natural rounded-xl p-6 flex flex-col gap-4 relative"
@@ -35,7 +48,13 @@ export function ServicesSection() {
                   <span className="font-raleway text-2xl font-black text-forest">R${sv.price}</span>
                   <span className="font-inter text-xs text-ink-dim">{sv.duration}</span>
                 </div>
-                <Button href={BUSINESS.inbarberUrl} target="_blank" variant="outline" size="sm" className="w-full">AGENDAR</Button>
+                {sv.premium ? (
+                  <a href={`https://wa.me/${BUSINESS.whatsapp}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="w-full">
+                    <Button variant="outline" size="sm" className="w-full border-olive text-olive hover:bg-olive hover:text-white">SOLICITAR ORÇAMENTO</Button>
+                  </a>
+                ) : (
+                  <Button href={BUSINESS.inbarberUrl} target="_blank" variant="outline" size="sm" className="w-full">AGENDAR</Button>
+                )}
               </div>
             )
           })}

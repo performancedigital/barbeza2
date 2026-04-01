@@ -1,7 +1,12 @@
 import { useState } from 'react'
-import { Lock, Eye, EyeOff } from 'lucide-react'
+import { Lock, Eye, EyeOff, KeyRound } from 'lucide-react'
 
-const PASSWORD = 'barbeza@2025'
+const DEFAULT_PASSWORD = 'barbeza@2025'
+const PWD_KEY = 'barbeza-pwd'
+
+function getCurrentPassword() {
+  return localStorage.getItem(PWD_KEY) || DEFAULT_PASSWORD
+}
 
 interface Props {
   onAuth: () => void
@@ -11,16 +16,24 @@ export function DashboardLogin({ onAuth }: Props) {
   const [input, setInput] = useState('')
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
+  const [resetDone, setResetDone] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (input === PASSWORD) {
+    if (input === getCurrentPassword()) {
       localStorage.setItem('barbeza-admin-auth', '1')
       onAuth()
     } else {
       setError(true)
       setTimeout(() => setError(false), 2000)
     }
+  }
+
+  const handleReset = () => {
+    localStorage.removeItem(PWD_KEY)
+    setResetDone(true)
+    setInput('')
+    setTimeout(() => setResetDone(false), 4000)
   }
 
   return (
@@ -53,7 +66,14 @@ export function DashboardLogin({ onAuth }: Props) {
               {show ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
+
           {error && <p className="font-inter text-xs text-red-400">Senha incorreta. Tente novamente.</p>}
+          {resetDone && (
+            <p className="font-inter text-xs text-forest bg-forest/10 rounded px-3 py-2">
+              Senha redefinida. Use: <strong>barbeza@2025</strong>
+            </p>
+          )}
+
           <button
             type="submit"
             className="w-full bg-forest text-white font-raleway text-xs tracking-widest py-3 rounded hover:bg-forest-light transition-colors"
@@ -62,7 +82,14 @@ export function DashboardLogin({ onAuth }: Props) {
           </button>
         </form>
 
-        <p className="font-inter text-[10px] text-ink-muted/40 mt-6">
+        <button
+          onClick={handleReset}
+          className="mt-5 flex items-center gap-1.5 text-ink-muted/50 hover:text-forest text-[11px] font-inter mx-auto transition-colors"
+        >
+          <KeyRound size={12} /> Esqueceu a senha? Redefinir para o padrão
+        </button>
+
+        <p className="font-inter text-[10px] text-ink-muted/30 mt-4">
           Barbeza &copy; {new Date().getFullYear()} &mdash; Acesso restrito
         </p>
       </div>

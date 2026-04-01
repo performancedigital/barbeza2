@@ -1,45 +1,37 @@
-﻿import { BUSINESS } from '@/data/content'
-import { ExternalLink, Image, Clock, Users, Scissors, CheckCircle, Circle } from 'lucide-react'
-
-const SETUP_ITEMS = [
-  { key: 'logo', label: 'Logo enviada em public/assets/logo/' },
-  { key: 'hero', label: 'Foto do hero em public/assets/images/hero-bg.jpg' },
-  { key: 'gallery', label: 'Fotos da galeria em public/assets/images/' },
-  { key: 'renders', label: 'Renders do espaço em public/assets/renders/' },
-  { key: 'video', label: 'Vídeo do ambiente em public/assets/videos/ambiente.mp4' },
-  { key: 'phone', label: 'Telefone/WhatsApp atualizado em src/data/content.ts' },
-]
+import { BUSINESS, SERVICES } from '@/data/content'
+import { ExternalLink, Image, Clock, Scissors, TrendingUp } from 'lucide-react'
 
 export function DashboardHome() {
-  const checked = JSON.parse(localStorage.getItem('barbeza-setup') || '{}') as Record<string, boolean>
-
-  const toggle = (key: string) => {
-    const updated = { ...checked, [key]: !checked[key] }
-    localStorage.setItem('barbeza-setup', JSON.stringify(updated))
-    window.location.reload()
-  }
-
-  const completedCount = Object.values(checked).filter(Boolean).length
+  const galleryCount = (() => {
+    try { return JSON.parse(localStorage.getItem('barbeza-gallery') || '[]').length } catch { return 6 }
+  })()
+  const servicesCount = (() => {
+    try { return JSON.parse(localStorage.getItem('barbeza-services') || '[]').length } catch { return SERVICES.length }
+  })()
+  const hoursData = (() => {
+    try { return JSON.parse(localStorage.getItem('barbeza-hours') || '{}') } catch { return {} }
+  })()
+  const activeDays = Object.values(hoursData as Record<string, {active: boolean}>).filter(h => h.active).length || 6
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Welcome */}
       <div>
         <p className="font-inter text-xs text-forest tracking-widest uppercase mb-2">Bem-vindo ao</p>
         <h2 className="font-raleway text-ink text-2xl tracking-widest">PAINEL BARBEZA</h2>
+        <p className="font-inter text-sm text-ink-muted mt-1">Gerencie serviços, galeria e horários diretamente aqui.</p>
       </div>
 
       {/* Quick stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { icon: Scissors, label: 'Serviços', value: '4' },
-          { icon: Image, label: 'Fotos', value: '6' },
-          { icon: Clock, label: 'Dias ativos', value: '6' },
-          { icon: Users, label: 'Clientes', value: JSON.parse(localStorage.getItem('barbeza-clients') || '[]').length.toString() },
+          { icon: Scissors,    label: 'Serviços',     value: String(servicesCount) },
+          { icon: Image,       label: 'Fotos',         value: String(galleryCount)  },
+          { icon: Clock,       label: 'Dias ativos',   value: String(activeDays)    },
+          { icon: TrendingUp,  label: 'Plataforma',    value: 'InBarber'            },
         ].map(({ icon: Icon, label, value }) => (
           <div key={label} className="glass-card rounded-lg p-5 text-center">
             <Icon size={20} className="text-forest mx-auto mb-2" />
-            <p className="font-raleway text-forest text-2xl font-bold">{value}</p>
+            <p className="font-raleway text-forest text-xl font-bold">{value}</p>
             <p className="font-inter text-xs text-ink-muted">{label}</p>
           </div>
         ))}
@@ -48,54 +40,33 @@ export function DashboardHome() {
       {/* Quick access */}
       <div className="glass-card rounded-lg p-5">
         <h3 className="font-raleway text-ink-muted text-xs tracking-widest uppercase mb-4">Acesso Rápido</h3>
-        <a
-          href={BUSINESS.inbarberUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-forest hover:text-brand-light text-sm font-inter transition-colors"
-        >
-          <ExternalLink size={14} />
-          Abrir sistema de agendamento (InBarber)
-        </a>
-        <div className="mt-2">
-          <a
-            href={BUSINESS.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-forest hover:text-brand-light text-sm font-inter transition-colors"
-          >
-            <ExternalLink size={14} />
+        <div className="flex flex-col gap-3">
+          <a href={BUSINESS.inbarberUrl} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-forest hover:text-forest-light text-sm font-inter transition-colors group">
+            <ExternalLink size={14} className="group-hover:translate-x-0.5 transition-transform"/>
+            Abrir sistema de agendamento (InBarber)
+          </a>
+          <a href={BUSINESS.instagramUrl} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-forest hover:text-forest-light text-sm font-inter transition-colors group">
+            <ExternalLink size={14} className="group-hover:translate-x-0.5 transition-transform"/>
             Ver Instagram @barbezabarbearia
+          </a>
+          <a href="/" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-forest hover:text-forest-light text-sm font-inter transition-colors group">
+            <ExternalLink size={14} className="group-hover:translate-x-0.5 transition-transform"/>
+            Ver o site ao vivo
           </a>
         </div>
       </div>
 
-      {/* Setup checklist */}
-      <div className="glass-card rounded-lg p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-raleway text-ink-muted text-xs tracking-widest uppercase">Checklist de Setup</h3>
-          <span className="font-raleway text-forest text-xs">{completedCount}/{SETUP_ITEMS.length}</span>
-        </div>
-        <div className="flex flex-col gap-3">
-          {SETUP_ITEMS.map(item => (
-            <button
-              key={item.key}
-              onClick={() => toggle(item.key)}
-              className="flex items-center gap-3 text-left group"
-            >
-              {checked[item.key]
-                ? <CheckCircle size={16} className="text-forest flex-shrink-0" />
-                : <Circle size={16} className="text-cream-muted/40 flex-shrink-0 group-hover:text-forest/50 transition-colors" />
-              }
-              <span className={`font-inter text-sm ${checked[item.key] ? 'text-cream-muted/50 line-through' : 'text-ink-muted'}`}>
-                {item.label}
-              </span>
-            </button>
-          ))}
-        </div>
+      {/* Info box */}
+      <div className="glass-card rounded-lg p-5 border border-forest/10">
+        <p className="font-inter text-xs text-ink-muted leading-relaxed">
+          <strong className="text-forest font-raleway tracking-wider">COMO FUNCIONA:</strong><br/>
+          Alterações em <strong>Serviços</strong> e <strong>Horários</strong> são salvas e refletem no site automáticamente.<br/>
+          Fotos adicionadas na <strong>Galeria</strong> aparecem na página após um reload do visitante.
+        </p>
       </div>
     </div>
   )
 }
-
-

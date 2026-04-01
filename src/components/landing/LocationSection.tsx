@@ -1,11 +1,22 @@
 import { MapPin, Clock, Phone, Instagram, MessageCircle } from "lucide-react"
 import { BUSINESS, HOURS } from "@/data/content"
+import type { BusinessHours } from "@/types"
 import { Button } from "@/components/ui/Button"
 import { GoldDivider } from "@/components/ui/GoldDivider"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
+
+function loadHours(): BusinessHours {
+  try {
+    const s = localStorage.getItem('barbeza-hours')
+    return s ? (JSON.parse(s) as BusinessHours) : HOURS
+  } catch { return HOURS }
+}
+
 export function LocationSection() {
   const { ref, isVisible } = useScrollAnimation(0.1)
-  const activeHours = Object.values(HOURS).filter(h => h.active)
+  const hours = loadHours()
+  const entries = Object.values(hours)
+
   return (
     <section id="contato" className="section-padding bg-natural">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -44,16 +55,15 @@ export function LocationSection() {
                 <div className="flex-1">
                   <p className="font-raleway text-ink font-bold text-sm mb-3">Horário de Funcionamento</p>
                   <div className="space-y-1.5">
-                    {activeHours.map(h => (
+                    {entries.map(h => (
                       <div key={h.label} className="flex items-center justify-between text-xs">
                         <span className="font-inter text-ink-muted">{h.label}</span>
-                        <span className="font-raleway font-bold text-forest">{h.open} – {h.close}</span>
+                        {h.active
+                          ? <span className="font-raleway font-bold text-forest">{h.open} – {h.close}</span>
+                          : <span className="font-inter text-ink-dim">Fechado</span>
+                        }
                       </div>
                     ))}
-                    <div className="flex items-center justify-between text-xs mt-2 pt-2 border-t border-natural-border">
-                      <span className="font-inter text-ink-muted">Domingo</span>
-                      <span className="font-inter text-ink-dim">Fechado</span>
-                    </div>
                   </div>
                 </div>
               </div>
