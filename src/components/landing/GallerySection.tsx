@@ -1,15 +1,8 @@
 import { useState } from "react"
-import { GALLERY } from "@/data/content"
 import type { GalleryItem } from "@/types"
 import { GoldDivider } from "@/components/ui/GoldDivider"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
-
-function loadGalleryData(): GalleryItem[] {
-  try {
-    const s = localStorage.getItem('barbeza-gallery')
-    return s ? (JSON.parse(s) as GalleryItem[]) : GALLERY
-  } catch { return GALLERY }
-}
+import { useContent } from "@/context/ContentContext"
 
 const CATS = [
   { key: "all",       label: "Todos"    },
@@ -21,7 +14,8 @@ const CATS = [
 export function GallerySection() {
   const [cat, setCat] = useState("all")
   const { ref, isVisible } = useScrollAnimation(0.1)
-  const gallery = loadGalleryData()
+  const { content } = useContent()
+  const gallery = content.gallery
   const filtered = cat === "all" ? gallery : gallery.filter((g: GalleryItem) => g.category === cat)
 
   return (

@@ -1,7 +1,10 @@
-﻿import { BUSINESS } from "@/data/content"
+import { useContent } from "@/context/ContentContext"
+
 export function WhatsAppFloat() {
+  const { content } = useContent()
+  const { business } = content
   return (
-    <a href={`https://wa.me/${BUSINESS.whatsapp}?text=Ola! Gostaria de agendar um horario na Barbeza Barbearia.`}
+    <a href={`https://wa.me/${business.whatsapp}?text=Ola! Gostaria de agendar um horario na ${business.name}.`}
       target="_blank" rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-200"
       aria-label="WhatsApp">

@@ -1,41 +1,43 @@
-﻿import { useState } from 'react'
-import { SERVICES } from '@/data/content'
+import { useState } from 'react'
+import { useContent } from '@/context/ContentContext'
+import { saveContent } from '@/lib/api'
 import type { Service } from '@/types'
 import { Pencil, Check, X } from 'lucide-react'
 
-const STORAGE_KEY = 'barbeza-services'
-
-function loadServices(): Service[] {
-  try {
-    const s = localStorage.getItem(STORAGE_KEY)
-    return s ? JSON.parse(s) : SERVICES
-  } catch { return SERVICES }
-}
-
-function saveServices(services: Service[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(services))
-}
+const TOKEN_KEY = 'barbeza-admin-token'
 
 export function ServicesManager() {
-  const [services, setServices] = useState<Service[]>(loadServices)
+  const { content, setContent } = useContent()
   const [editing, setEditing] = useState<string | null>(null)
   const [form, setForm] = useState<Partial<Service>>({})
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const startEdit = (s: Service) => { setEditing(s.id); setForm(s) }
-  const cancelEdit = () => { setEditing(null); setForm({}) }
+  const startEdit = (s: Service) => { setEditing(s.id); setForm(s); setError(null) }
+  const cancelEdit = () => { setEditing(null); setForm({}); setError(null) }
 
-  const saveEdit = () => {
-    const updated = services.map(s => s.id === editing ? { ...s, ...form } : s)
-    setServices(updated)
-    saveServices(updated)
-    setEditing(null)
+  const saveEdit = async () => {
+    const updated = content.services.map(s => s.id === editing ? { ...s, ...form } : s)
+    const token = sessionStorage.getItem(TOKEN_KEY) || ''
+    setSaving(true)
+    setError(null)
+    try {
+      const result = await saveContent({ services: updated }, token)
+      setContent(result)
+      setEditing(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao salvar.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
     <div>
       <h2 className="font-raleway text-forest text-lg tracking-widest mb-6">SERVIÇOS & PREÇOS</h2>
+      {error && <p className="font-inter text-xs text-red-500 bg-red-50 rounded px-3 py-2 mb-4">{error}</p>}
       <div className="flex flex-col gap-4">
-        {services.map(service => (
+        {content.services.map(service => (
           <div key={service.id} className="glass-card rounded-lg p-5">
             {editing === service.id ? (
               <div className="flex flex-col gap-3">
@@ -68,8 +70,8 @@ export function ServicesManager() {
                   placeholder="Descrição"
                 />
                 <div className="flex gap-2">
-                  <button onClick={saveEdit} className="flex items-center gap-1 bg-forest text-dark px-4 py-1.5 text-xs font-raleway tracking-wider rounded hover:bg-forest-light">
-                    <Check size={14} /> Salvar
+                  <button onClick={saveEdit} disabled={saving} className="flex items-center gap-1 bg-forest text-white px-4 py-1.5 text-xs font-raleway tracking-wider rounded hover:bg-forest-light disabled:opacity-60">
+                    <Check size={14} /> {saving ? 'Salvando...' : 'Salvar'}
                   </button>
                   <button onClick={cancelEdit} className="flex items-center gap-1 border border-natural-border text-ink-muted px-4 py-1.5 text-xs rounded hover:border-forest/50">
                     <X size={14} /> Cancelar
@@ -81,7 +83,7 @@ export function ServicesManager() {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <p className="font-raleway text-ink text-sm tracking-wide">{service.name}</p>
-                    {service.featured && <span className="text-[9px] bg-forest text-dark px-1.5 py-0.5 font-raleway">POPULAR</span>}
+                    {service.featured && <span className="text-[9px] bg-forest text-white px-1.5 py-0.5 font-raleway">POPULAR</span>}
                     {service.premium && <span className="text-[9px] border border-forest text-forest px-1.5 py-0.5 font-raleway">PREMIUM</span>}
                   </div>
                   <p className="font-inter text-xs text-ink-muted">{service.duration} • {service.description}</p>
@@ -100,5 +102,3 @@ export function ServicesManager() {
     </div>
   )
 }
-
-

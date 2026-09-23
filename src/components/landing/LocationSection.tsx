@@ -1,20 +1,13 @@
 import { MapPin, Clock, Phone, Instagram, MessageCircle } from "lucide-react"
-import { BUSINESS, HOURS } from "@/data/content"
-import type { BusinessHours } from "@/types"
 import { Button } from "@/components/ui/Button"
 import { GoldDivider } from "@/components/ui/GoldDivider"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
-
-function loadHours(): BusinessHours {
-  try {
-    const s = localStorage.getItem('barbeza-hours')
-    return s ? (JSON.parse(s) as BusinessHours) : HOURS
-  } catch { return HOURS }
-}
+import { useContent } from "@/context/ContentContext"
 
 export function LocationSection() {
   const { ref, isVisible } = useScrollAnimation(0.1)
-  const hours = loadHours()
+  const { content } = useContent()
+  const { business, hours } = content
   const entries = Object.values(hours)
 
   return (
@@ -29,7 +22,7 @@ export function LocationSection() {
           style={{ opacity:isVisible?1:0, transition:"opacity 0.7s ease" }}>
           <div className="rounded-2xl overflow-hidden shadow-[0_8px_40px_rgba(61,90,61,0.12)] border border-natural-border aspect-[4/3]">
             <iframe
-              src={BUSINESS.googleMapsUrl}
+              src={business.googleMapsUrl}
               className="w-full h-full border-0"
               title="Localização Barbeza"
               loading="lazy"
@@ -43,8 +36,8 @@ export function LocationSection() {
                 </div>
                 <div>
                   <p className="font-raleway text-ink font-bold text-sm mb-1">Endereço</p>
-                  <p className="font-inter text-ink-muted text-sm leading-relaxed">{BUSINESS.fullAddress}</p>
-                  <a href={BUSINESS.googleMapsLink} target="_blank" rel="noopener noreferrer"
+                  <p className="font-inter text-ink-muted text-sm leading-relaxed">{business.fullAddress}</p>
+                  <a href={business.googleMapsLink} target="_blank" rel="noopener noreferrer"
                     className="font-inter text-xs text-forest hover:underline mt-1 inline-block">Ver no Google Maps →</a>
                 </div>
               </div>
@@ -69,16 +62,16 @@ export function LocationSection() {
               </div>
             </div>
             <div className="flex flex-col gap-3">
-              <a href={`https://wa.me/${BUSINESS.whatsapp}`} target="_blank" rel="noopener noreferrer">
+              <a href={`https://wa.me/${business.whatsapp}`} target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="w-full bg-green-600 hover:bg-green-700 border-0 text-white">
                   <MessageCircle size={18} className="mr-2"/> WHATSAPP
                 </Button>
               </a>
               <div className="grid grid-cols-2 gap-3">
-                <a href={`tel:${BUSINESS.phone}`}>
+                <a href={`tel:${business.phone}`}>
                   <Button variant="outline" size="sm" className="w-full"><Phone size={14} className="mr-2"/> Ligar</Button>
                 </a>
-                <a href={BUSINESS.instagramUrl} target="_blank" rel="noopener noreferrer">
+                <a href={business.instagramUrl} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" size="sm" className="w-full"><Instagram size={14} className="mr-2"/> Instagram</Button>
                 </a>
               </div>

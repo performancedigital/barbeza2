@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===================== THEME (editável via /admin) ===================== */
+:root {
+  --color-forest: 61 90 61;
+  --color-forest-light: 78 122 78;
+  --color-forest-dark: 42 61 42;
+  --color-forest-deep: 15 26 15;
+  --color-olive: 139 133 85;
+  --color-olive-light: 168 162 112;
+  --color-olive-dark: 92 88 56;
+}
+
 /* ===================== CURSOR ===================== */
 @media (pointer: fine) {
   * { cursor: url("/cursor-scissor.svg") 16 16, auto !important; }

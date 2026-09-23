@@ -1,24 +1,17 @@
 import { Scissors, Smile, Sparkles, Crown, type LucideProps } from "lucide-react"
 import { type ForwardRefExoticComponent, type RefAttributes } from "react"
-import { SERVICES, BUSINESS } from "@/data/content"
-import type { Service } from "@/types"
 import { Button } from "@/components/ui/Button"
 import { GoldDivider } from "@/components/ui/GoldDivider"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
+import { useContent } from "@/context/ContentContext"
 
 type LucideIcon = ForwardRefExoticComponent<LucideProps & RefAttributes<SVGSVGElement>>
 const ICONS: Record<string,LucideIcon> = { Scissors, Smile, Sparkles, Crown }
 
-function loadServices(): Service[] {
-  try {
-    const s = localStorage.getItem('barbeza-services')
-    return s ? (JSON.parse(s) as Service[]) : SERVICES
-  } catch { return SERVICES }
-}
-
 export function ServicesSection() {
   const { ref, isVisible } = useScrollAnimation(0.1)
-  const services = loadServices()
+  const { content } = useContent()
+  const { services, business } = content
   const waText = encodeURIComponent('Olá! Gostaria de solicitar um orçamento para o Making Of do Noivo.')
 
   return (
@@ -49,11 +42,11 @@ export function ServicesSection() {
                   <span className="font-inter text-xs text-ink-dim">{sv.duration}</span>
                 </div>
                 {sv.premium ? (
-                  <a href={`https://wa.me/${BUSINESS.whatsapp}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="w-full">
+                  <a href={`https://wa.me/${business.whatsapp}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="w-full">
                     <Button variant="outline" size="sm" className="w-full border-olive text-olive hover:bg-olive hover:text-white">SOLICITAR ORÇAMENTO</Button>
                   </a>
                 ) : (
-                  <Button href={BUSINESS.inbarberUrl} target="_blank" variant="outline" size="sm" className="w-full">AGENDAR</Button>
+                  <Button href={business.inbarberUrl} target="_blank" variant="outline" size="sm" className="w-full">AGENDAR</Button>
                 )}
               </div>
             )

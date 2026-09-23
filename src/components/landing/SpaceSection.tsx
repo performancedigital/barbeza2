@@ -1,12 +1,18 @@
 import { useState } from "react"
-import { SPACE_ROOMS, BUSINESS } from "@/data/content"
 import { Button } from "@/components/ui/Button"
 import { GoldDivider } from "@/components/ui/GoldDivider"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
+import { useContent } from "@/context/ContentContext"
+
 export function SpaceSection() {
   const [active, setActive] = useState(0)
   const { ref, isVisible } = useScrollAnimation(0.1)
-  const room = SPACE_ROOMS[active]
+  const { content } = useContent()
+  const { spaceRooms, business } = content
+  const room = spaceRooms[Math.min(active, spaceRooms.length - 1)]
+
+  if (!room) return null
+
   return (
     <section id="espaco" className="section-padding bg-white">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -33,13 +39,15 @@ export function SpaceSection() {
                 <p className="font-inter text-ink-dim text-xs mt-1">Imagem em breve</p>
               </div>
             </div>
-            <div className="absolute top-4 left-4">
-              <span className="bg-forest text-white text-[9px] font-raleway font-bold px-3 py-1 tracking-widest rounded">{room.badge}</span>
-            </div>
+            {room.badge && (
+              <div className="absolute top-4 left-4">
+                <span className="bg-forest text-white text-[9px] font-raleway font-bold px-3 py-1 tracking-widest rounded">{room.badge}</span>
+              </div>
+            )}
           </div>
           <div className="flex flex-col gap-6">
             <div className="flex gap-3 flex-wrap">
-              {SPACE_ROOMS.map((r,i) => (
+              {spaceRooms.map((r,i) => (
                 <button key={r.id} onClick={() => setActive(i)}
                   className={`font-inter text-xs tracking-wider px-4 py-2 rounded-full border transition-all duration-200 ${
                     i === active
@@ -53,7 +61,7 @@ export function SpaceSection() {
               <p className="font-inter text-ink-muted leading-relaxed">{room.description}</p>
             </div>
             <div className="pt-2">
-              <Button href={BUSINESS.inbarberUrl} target="_blank" size="lg">AGENDAR VISITA</Button>
+              <Button href={business.inbarberUrl} target="_blank" size="lg">AGENDAR VISITA</Button>
             </div>
           </div>
         </div>

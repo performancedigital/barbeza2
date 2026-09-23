@@ -1,23 +1,48 @@
 import { useState, useEffect } from 'react'
-import { LayoutDashboard, Scissors, Image, Clock, ShieldCheck, LogOut, ChevronRight, type LucideProps } from 'lucide-react'
+import {
+  LayoutDashboard, Building2, Film, Scissors, Video, DoorOpen, Image,
+  Quote, TrendingUp, Clock, Palette, Eye, ShieldCheck, LogOut, ChevronRight,
+  type LucideProps,
+} from 'lucide-react'
 import { type ForwardRefExoticComponent, type RefAttributes } from 'react'
 import { DashboardLogin } from '@/components/dashboard/DashboardLogin'
 import { DashboardHome } from '@/components/dashboard/DashboardHome'
+import { BusinessManager } from '@/components/dashboard/BusinessManager'
+import { HeroManager } from '@/components/dashboard/HeroManager'
 import { ServicesManager } from '@/components/dashboard/ServicesManager'
+import { VideoSectionManager } from '@/components/dashboard/VideoSectionManager'
+import { SpaceManager } from '@/components/dashboard/SpaceManager'
 import { GalleryManager } from '@/components/dashboard/GalleryManager'
+import { TestimonialsManager } from '@/components/dashboard/TestimonialsManager'
+import { StatsManager } from '@/components/dashboard/StatsManager'
 import { HoursManager } from '@/components/dashboard/HoursManager'
+import { ThemeManager } from '@/components/dashboard/ThemeManager'
+import { SectionsManager } from '@/components/dashboard/SectionsManager'
 import { SecurityManager } from '@/components/dashboard/SecurityManager'
 
-type Tab = 'home' | 'services' | 'gallery' | 'hours' | 'security'
+type Tab =
+  | 'home' | 'business' | 'hero' | 'services' | 'video' | 'space' | 'gallery'
+  | 'testimonials' | 'stats' | 'hours' | 'theme' | 'sections' | 'security'
+
 type LucideIcon = ForwardRefExoticComponent<LucideProps & RefAttributes<SVGSVGElement>>
 
 const TABS: { id: Tab; label: string; icon: LucideIcon }[] = [
-  { id: 'home',     label: 'Dashboard',  icon: LayoutDashboard },
-  { id: 'services', label: 'Serviços',   icon: Scissors },
-  { id: 'gallery',  label: 'Galeria',    icon: Image },
-  { id: 'hours',    label: 'Horários',   icon: Clock },
-  { id: 'security', label: 'Segurança',  icon: ShieldCheck },
+  { id: 'home',         label: 'Dashboard',   icon: LayoutDashboard },
+  { id: 'business',     label: 'Negócio',     icon: Building2 },
+  { id: 'hero',         label: 'Capa',        icon: Film },
+  { id: 'services',     label: 'Serviços',    icon: Scissors },
+  { id: 'video',        label: 'Vídeo',       icon: Video },
+  { id: 'space',        label: 'Ambientes',   icon: DoorOpen },
+  { id: 'gallery',      label: 'Galeria',     icon: Image },
+  { id: 'testimonials', label: 'Depoimentos', icon: Quote },
+  { id: 'stats',        label: 'Estatísticas',icon: TrendingUp },
+  { id: 'hours',        label: 'Horários',    icon: Clock },
+  { id: 'theme',        label: 'Cores',       icon: Palette },
+  { id: 'sections',     label: 'Seções',      icon: Eye },
+  { id: 'security',     label: 'Segurança',   icon: ShieldCheck },
 ]
+
+const TOKEN_KEY = 'barbeza-admin-token'
 
 export function DashboardPage() {
   const [authed, setAuthed] = useState(false)
@@ -25,22 +50,30 @@ export function DashboardPage() {
   const [mobileNav, setMobileNav] = useState(false)
 
   useEffect(() => {
-    setAuthed(localStorage.getItem('barbeza-admin-auth') === '1')
+    setAuthed(!!sessionStorage.getItem(TOKEN_KEY))
   }, [])
 
   const logout = () => {
-    localStorage.removeItem('barbeza-admin-auth')
+    sessionStorage.removeItem(TOKEN_KEY)
     setAuthed(false)
   }
 
   if (!authed) return <DashboardLogin onAuth={() => setAuthed(true)} />
 
   const content: Record<Tab, React.ReactElement> = {
-    home:     <DashboardHome />,
-    services: <ServicesManager />,
-    gallery:  <GalleryManager />,
-    hours:    <HoursManager />,
-    security: <SecurityManager />,
+    home:         <DashboardHome />,
+    business:     <BusinessManager />,
+    hero:         <HeroManager />,
+    services:     <ServicesManager />,
+    video:        <VideoSectionManager />,
+    space:        <SpaceManager />,
+    gallery:      <GalleryManager />,
+    testimonials: <TestimonialsManager />,
+    stats:        <StatsManager />,
+    hours:        <HoursManager />,
+    theme:        <ThemeManager />,
+    sections:     <SectionsManager />,
+    security:     <SecurityManager />,
   }
 
   return (
@@ -57,7 +90,7 @@ export function DashboardPage() {
           </a>
         </div>
 
-        <nav className="flex-1 py-4 px-3 flex flex-col gap-1">
+        <nav className="flex-1 py-4 px-3 flex flex-col gap-1 overflow-y-auto">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}

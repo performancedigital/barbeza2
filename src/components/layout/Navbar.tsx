@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useScrollY, useScrollProgress } from "@/hooks/useScrollAnimation"
-import { BUSINESS } from "@/data/content"
+import { useContent } from "@/context/ContentContext"
 import { Button } from "@/components/ui/Button"
 import { Menu, X } from "lucide-react"
 
@@ -17,6 +17,8 @@ export function Navbar() {
   const progress = useScrollProgress()
   const [open, setOpen] = useState(false)
   const scrolled = scrollY > 80
+  const { content } = useContent()
+  const { business } = content
 
   return (
     <>
@@ -58,7 +60,7 @@ export function Navbar() {
 
           <div className="hidden md:block">
             <Button
-              href={BUSINESS.inbarberUrl}
+              href={business.inbarberUrl}
               target="_blank"
               size="sm"
               variant={scrolled ? "primary" : "outline"}
@@ -96,12 +98,12 @@ export function Navbar() {
               </a>
             ))}
             <div className="mt-4">
-              <Button href={BUSINESS.inbarberUrl} target="_blank" size="lg" onClick={() => setOpen(false)}>AGENDAR</Button>
+              <Button href={business.inbarberUrl} target="_blank" size="lg" onClick={() => setOpen(false)}>AGENDAR</Button>
             </div>
           </div>
           <div className="pb-8 flex items-center justify-center gap-3">
             <div className="h-px w-10 bg-forest/20" />
-            <span className="font-inter text-xs text-ink-dim">@barbezabarbearia</span>
+            <span className="font-inter text-xs text-ink-dim">@{business.instagram}</span>
             <div className="h-px w-10 bg-forest/20" />
           </div>
         </div>

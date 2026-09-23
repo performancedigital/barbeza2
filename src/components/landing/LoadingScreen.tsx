@@ -1,5 +1,5 @@
-﻿import { useEffect, useState } from "react"
-import { BUSINESS } from "@/data/content"
+import { useEffect, useState } from "react"
+import { useContent } from "@/context/ContentContext"
 
 const LETTERS = "BARBEZA".split("")
 
@@ -7,6 +7,7 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
   const [vis, setVis]         = useState(0)
   const [showLogo, setShowLogo] = useState(false)
   const [fading, setFading]   = useState(false)
+  const { content } = useContent()
 
   useEffect(() => {
     const seen = sessionStorage.getItem("barbeza-loaded")
@@ -36,11 +37,11 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
       </div>
       <p className="font-playfair italic text-white/50 text-sm md:text-base tracking-[0.4em] transition-all duration-700"
         style={{ opacity: vis >= LETTERS.length ? 1 : 0 }}>
-        {BUSINESS.slogan}
+        {content.business.slogan}
       </p>
       {showLogo && (
         <div className="mt-8 animate-fade-in">
-          <img src="/assets/logo/logo-horizontal-branca.png" alt="Barbeza" className="h-8 w-auto object-contain opacity-70" />
+          <img src="/assets/logo/logo-horizontal-branca.png" alt={content.business.name} className="h-8 w-auto object-contain opacity-70" />
         </div>
       )}
       <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-forest to-olive transition-all duration-1000"

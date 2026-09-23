@@ -1,14 +1,16 @@
-import { STATS } from "@/data/content"
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
+import { useContent } from "@/context/ContentContext"
 
 export function StatsBar() {
   const { ref, isVisible } = useScrollAnimation(0.3)
+  const { content } = useContent()
+
   return (
     <section id="stats" className="bg-forest-deep border-y border-forest/20">
       <div ref={ref} className="max-w-7xl mx-auto px-6 md:px-10 py-10 md:py-14">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
-          {STATS.map((stat, idx) => {
+          {content.stats.map((stat, idx) => {
             const inner = (
               <div className="flex flex-col items-center text-center gap-1">
                 <div className="font-raleway font-bold text-3xl md:text-4xl text-olive transition-all duration-500"

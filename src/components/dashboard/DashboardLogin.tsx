@@ -1,12 +1,8 @@
 import { useState } from 'react'
 import { Lock, Eye, EyeOff, KeyRound } from 'lucide-react'
+import { login, resetPassword } from '@/lib/api'
 
-const DEFAULT_PASSWORD = 'barbeza@2025'
-const PWD_KEY = 'barbeza-pwd'
-
-function getCurrentPassword() {
-  return localStorage.getItem(PWD_KEY) || DEFAULT_PASSWORD
-}
+const TOKEN_KEY = 'barbeza-admin-token'
 
 interface Props {
   onAuth: () => void
@@ -17,23 +13,38 @@ export function DashboardLogin({ onAuth }: Props) {
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
   const [resetDone, setResetDone] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (input === getCurrentPassword()) {
-      localStorage.setItem('barbeza-admin-auth', '1')
-      onAuth()
-    } else {
+    setLoading(true)
+    try {
+      const ok = await login(input)
+      if (ok) {
+        sessionStorage.setItem(TOKEN_KEY, input)
+        onAuth()
+      } else {
+        setError(true)
+        setTimeout(() => setError(false), 2000)
+      }
+    } catch {
       setError(true)
       setTimeout(() => setError(false), 2000)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const handleReset = () => {
-    localStorage.removeItem(PWD_KEY)
-    setResetDone(true)
-    setInput('')
-    setTimeout(() => setResetDone(false), 4000)
+  const handleReset = async () => {
+    try {
+      await resetPassword()
+      setResetDone(true)
+      setInput('')
+      setTimeout(() => setResetDone(false), 4000)
+    } catch {
+      setError(true)
+      setTimeout(() => setError(false), 2000)
+    }
   }
 
   return (
@@ -76,9 +87,10 @@ export function DashboardLogin({ onAuth }: Props) {
 
           <button
             type="submit"
-            className="w-full bg-forest text-white font-raleway text-xs tracking-widest py-3 rounded hover:bg-forest-light transition-colors"
+            disabled={loading}
+            className="w-full bg-forest text-white font-raleway text-xs tracking-widest py-3 rounded hover:bg-forest-light transition-colors disabled:opacity-60"
           >
-            ENTRAR
+            {loading ? 'ENTRANDO...' : 'ENTRAR'}
           </button>
         </form>
 

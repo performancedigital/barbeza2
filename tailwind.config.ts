@@ -4,8 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        forest:  { DEFAULT:"#3D5A3D", light:"#4E7A4E", dark:"#2A3D2A", deep:"#0F1A0F" },
-        olive:   { DEFAULT:"#8B8555", light:"#A8A270", dark:"#5C5838" },
+        forest:  {
+          DEFAULT: "rgb(var(--color-forest) / <alpha-value>)",
+          light:   "rgb(var(--color-forest-light) / <alpha-value>)",
+          dark:    "rgb(var(--color-forest-dark) / <alpha-value>)",
+          deep:    "rgb(var(--color-forest-deep) / <alpha-value>)",
+        },
+        olive:   {
+          DEFAULT: "rgb(var(--color-olive) / <alpha-value>)",
+          light:   "rgb(var(--color-olive-light) / <alpha-value>)",
+          dark:    "rgb(var(--color-olive-dark) / <alpha-value>)",
+        },
         natural: { DEFAULT:"#FAFAF5", alt:"#F0EDE5", card:"#FFFFFF", border:"#D8D5C8" },
         ink:     { DEFAULT:"#1A2A1A", muted:"#5A6B5A", dim:"#8A9A8A" },
         cream:   { DEFAULT:"#F5F5F0", light:"#FFFFFF", muted:"#C8C8B8" },

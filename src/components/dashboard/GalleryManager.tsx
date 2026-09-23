@@ -1,74 +1,84 @@
 import { useState, useRef } from 'react'
-import { GALLERY } from '@/data/content'
+import { useContent } from '@/context/ContentContext'
+import { saveContent, uploadImage } from '@/lib/api'
 import type { GalleryItem } from '@/types'
 import { Trash2, Plus, Upload, X } from 'lucide-react'
 
-const STORAGE_KEY = 'barbeza-gallery'
-
-function loadGallery(): GalleryItem[] {
-  try {
-    const s = localStorage.getItem(STORAGE_KEY)
-    return s ? JSON.parse(s) : GALLERY
-  } catch { return GALLERY }
-}
-
+const TOKEN_KEY = 'barbeza-admin-token'
 const CATEGORIES = ['cortes', 'barbas', 'ambiente'] as const
 
 export function GalleryManager() {
-  const [items, setItems] = useState<GalleryItem[]>(loadGallery)
+  const { content, setContent } = useContent()
   const [adding, setAdding] = useState(false)
   const [newAlt, setNewAlt] = useState('')
   const [newCat, setNewCat] = useState<GalleryItem['category']>('cortes')
   const [preview, setPreview] = useState<string | null>(null)
+  const [file, setFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
-  const save = (updated: GalleryItem[]) => {
-    setItems(updated)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+  const items = content.gallery
+
+  const persist = async (updated: GalleryItem[]) => {
+    const token = sessionStorage.getItem(TOKEN_KEY) || ''
+    setSaving(true)
+    setError(null)
+    try {
+      const result = await saveContent({ gallery: updated }, token)
+      setContent(result)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao salvar.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const remove = (id: string) => {
     if (!confirm('Remover esta foto?')) return
-    save(items.filter(i => i.id !== id))
+    persist(items.filter(i => i.id !== id))
   }
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Arquivo muito grande. Máximo 5MB por imagem.')
+    const f = e.target.files?.[0]
+    if (!f) return
+    if (f.size > 8 * 1024 * 1024) {
+      alert('Arquivo muito grande. Máximo 8MB por imagem.')
       return
     }
-    setUploading(true)
-    const reader = new FileReader()
-    reader.onload = ev => {
-      setPreview(ev.target?.result as string)
-      setUploading(false)
-    }
-    reader.readAsDataURL(file)
+    setFile(f)
+    setPreview(URL.createObjectURL(f))
   }
 
-  const add = () => {
-    if (!preview) return
-    const item: GalleryItem = {
-      id: Date.now().toString(),
-      file: preview,
-      alt: newAlt || 'Barbeza',
-      category: newCat,
+  const add = async () => {
+    if (!file) return
+    const token = sessionStorage.getItem(TOKEN_KEY) || ''
+    setUploading(true)
+    setError(null)
+    try {
+      const url = await uploadImage(file, token)
+      const item: GalleryItem = {
+        id: Date.now().toString(),
+        file: url,
+        alt: newAlt || 'Barbeza',
+        category: newCat,
+      }
+      await persist([...items, item])
+      cancel()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao enviar imagem.')
+    } finally {
+      setUploading(false)
     }
-    save([...items, item])
-    setPreview(null)
-    setNewAlt('')
-    setNewCat('cortes')
-    setAdding(false)
-    if (fileRef.current) fileRef.current.value = ''
   }
 
   const cancel = () => {
     setAdding(false)
     setPreview(null)
+    setFile(null)
     setNewAlt('')
+    setNewCat('cortes')
     if (fileRef.current) fileRef.current.value = ''
   }
 
@@ -84,6 +94,8 @@ export function GalleryManager() {
         </button>
       </div>
 
+      {error && <p className="font-inter text-xs text-red-500 bg-red-50 rounded px-3 py-2 mb-4">{error}</p>}
+
       {adding && (
         <div className="glass-card rounded-lg p-5 mb-6 flex flex-col gap-4 border border-forest/20">
           <h3 className="font-raleway text-forest text-xs tracking-widest">ADICIONAR FOTO</h3>
@@ -98,10 +110,9 @@ export function GalleryManager() {
               <>
                 <Upload size={24} className="text-forest/40 mx-auto mb-2 group-hover:text-forest transition-colors" />
                 <p className="font-inter text-sm text-ink-muted">Clique para selecionar imagem</p>
-                <p className="font-inter text-xs text-ink-muted/60 mt-1">JPG, PNG ou WebP &bull; Máx 5MB</p>
+                <p className="font-inter text-xs text-ink-muted/60 mt-1">JPG, PNG ou WebP &bull; Máx 8MB</p>
               </>
             )}
-            {uploading && <p className="font-inter text-xs text-forest mt-2">Carregando...</p>}
           </div>
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
 
@@ -122,10 +133,10 @@ export function GalleryManager() {
           <div className="flex gap-3">
             <button
               onClick={add}
-              disabled={!preview}
+              disabled={!file || uploading}
               className="flex items-center gap-2 bg-forest text-white px-5 py-2 text-xs font-raleway tracking-wider rounded hover:bg-forest-light transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <Upload size={14} /> SALVAR FOTO
+              <Upload size={14} /> {uploading ? 'ENVIANDO...' : 'SALVAR FOTO'}
             </button>
             <button
               onClick={cancel}
@@ -137,7 +148,7 @@ export function GalleryManager() {
         </div>
       )}
 
-      <p className="font-inter text-xs text-ink-muted mb-4">{items.length} foto{items.length !== 1 ? 's' : ''} na galeria</p>
+      <p className="font-inter text-xs text-ink-muted mb-4">{items.length} foto{items.length !== 1 ? 's' : ''} na galeria{saving ? ' • salvando...' : ''}</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {items.map(item => (

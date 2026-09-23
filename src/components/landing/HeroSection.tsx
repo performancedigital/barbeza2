@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react"
-import { BUSINESS } from "@/data/content"
+import { useContent } from "@/context/ContentContext"
 import { Button } from "@/components/ui/Button"
 import { ChevronDown } from "lucide-react"
 
 export function HeroSection() {
+  const { content } = useContent()
+  const { business, hero } = content
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoLoaded, setVideoLoaded] = useState(false)
   const [phase, setPhase] = useState(0)
@@ -17,20 +19,26 @@ export function HeroSection() {
     return () => [t1, t2, t3, t4].forEach(clearTimeout)
   }, [])
 
+  useEffect(() => {
+    setVideoLoaded(false)
+    videoRef.current?.load()
+    videoRef.current?.play().catch(() => {})
+  }, [hero.videoUrl])
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-forest-deep">
       <div className="absolute inset-0">
-        <img src="/assets/images/hero-bg.webp" alt=""
+        <img src={hero.imageUrl} alt=""
           className="absolute inset-0 w-full h-full object-cover opacity-35"
           loading="eager"
           onError={(e) => { (e.target as HTMLImageElement).src = "/assets/images/hero-bg.jpg" }}
         />
-        <video ref={videoRef}
+        <video ref={videoRef} key={hero.videoUrl}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? "opacity-50" : "opacity-0"}`}
           autoPlay muted loop playsInline preload="metadata"
           onLoadedData={() => setVideoLoaded(true)}
         >
-          <source src="/assets/videos/ambiente.mp4" type="video/mp4" />
+          <source src={hero.videoUrl} type="video/mp4" />
         </video>
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/80 via-forest-deep/50 to-forest-deep/95" />
@@ -74,7 +82,7 @@ export function HeroSection() {
           }} />}
           <img
             src="/assets/logo/logo-hero.png"
-            alt="Barbeza Barbearia"
+            alt={business.name}
             style={{
               position:"relative",
               height: "clamp(100px, 14vw, 160px)",
@@ -96,32 +104,32 @@ export function HeroSection() {
         <div className="mb-4"
           style={{ opacity:phase>=2?1:0, transform:phase>=2?"none":"translateY(12px)", transition:"opacity 0.6s ease, transform 0.6s ease" }}>
           <span className="font-inter text-[11px] text-olive/80 tracking-[0.45em] uppercase">
-            {BUSINESS.tagline}
+            {business.tagline}
           </span>
         </div>
 
         <div className="mb-10"
           style={{ opacity:phase>=3?1:0, transform:phase>=3?"none":"translateY(16px)", transition:"opacity 0.7s ease, transform 0.7s ease" }}>
           <p className="font-playfair italic text-xl sm:text-2xl md:text-3xl text-white/70 tracking-wide">
-            {BUSINESS.slogan}
+            {business.slogan}
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4"
           style={{ opacity:phase>=4?1:0, transform:phase>=4?"none":"translateY(20px)", transition:"opacity 0.7s ease, transform 0.7s ease" }}>
-          <Button href={BUSINESS.inbarberUrl} target="_blank" size="lg"
+          <Button href={business.inbarberUrl} target="_blank" size="lg"
             className="bg-olive text-white hover:bg-olive-light border-0 shadow-[0_4px_28px_rgba(139,133,85,0.5)]">
-            AGENDAR HORÁRIO
+            {hero.ctaPrimaryLabel}
           </Button>
           <Button href="#espaco" size="lg" variant="outline"
             className="border-white/50 text-white hover:bg-white hover:text-forest">
-            CONHECER O ESPAÇO
+            {hero.ctaSecondaryLabel}
           </Button>
         </div>
 
         <div className="mt-6" style={{ opacity:phase>=4?0.45:0, transition:"opacity 1s ease 0.4s" }}>
           <span className="font-inter text-xs text-white/55 tracking-widest">
-            Bethânia, Ipatinga — MG
+            {business.city}
           </span>
         </div>
       </div>

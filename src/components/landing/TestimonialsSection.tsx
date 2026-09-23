@@ -1,16 +1,31 @@
 import { useState, useEffect, useRef } from "react"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
-import { TESTIMONIALS } from "@/data/content"
 import { GoldDivider } from "@/components/ui/GoldDivider"
 import { useScrollAnimation } from "@/hooks/useScrollAnimation"
+import { useContent } from "@/context/ContentContext"
+
 export function TestimonialsSection() {
   const [cur, setCur] = useState(0)
   const { ref, isVisible } = useScrollAnimation(0.2)
+  const { content } = useContent()
+  const testimonials = content.testimonials
   const timer = useRef<ReturnType<typeof setInterval>>()
-  const next = () => setCur(c => (c+1)%TESTIMONIALS.length)
-  const prev = () => setCur(c => (c-1+TESTIMONIALS.length)%TESTIMONIALS.length)
-  useEffect(() => { timer.current = setInterval(next, 5000); return () => clearInterval(timer.current) }, [])
-  const t = TESTIMONIALS[cur]
+  const next = () => setCur(c => (c+1)%testimonials.length)
+  const prev = () => setCur(c => (c-1+testimonials.length)%testimonials.length)
+
+  useEffect(() => {
+    if (testimonials.length < 2) return
+    timer.current = setInterval(next, 5000)
+    return () => clearInterval(timer.current)
+  }, [testimonials.length])
+
+  useEffect(() => {
+    if (cur >= testimonials.length) setCur(0)
+  }, [testimonials.length, cur])
+
+  const t = testimonials[Math.min(cur, testimonials.length - 1)]
+  if (!t) return null
+
   return (
     <section id="depoimentos" className="section-padding bg-forest-deep">
       <div className="max-w-4xl mx-auto px-6 md:px-10">
@@ -34,7 +49,7 @@ export function TestimonialsSection() {
           <div className="flex items-center justify-center gap-6 mt-8">
             <button onClick={prev} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:border-olive hover:text-olive transition-all duration-200"><ChevronLeft size={18}/></button>
             <div className="flex gap-2">
-              {TESTIMONIALS.map((_,i) => (
+              {testimonials.map((_,i) => (
                 <button key={i} onClick={() => setCur(i)} className={`rounded-full transition-all duration-300 ${i===cur?"w-6 h-2 bg-olive":"w-2 h-2 bg-white/20"}`}/>
               ))}
             </div>

@@ -14,10 +14,13 @@ import { LocationSection } from '@/components/landing/LocationSection'
 import { WhatsAppFloat } from '@/components/ui/WhatsAppFloat'
 import { ScrollToTop } from '@/components/ui/ScrollToTop'
 import { GoldDivider } from '@/components/ui/GoldDivider'
+import { useContent } from '@/context/ContentContext'
 
 export function LandingPage() {
   const [loaded, setLoaded] = useState(false)
   const handleDone = useCallback(() => setLoaded(true), [])
+  const { content } = useContent()
+  const { sections } = content
 
   return (
     <>
@@ -28,18 +31,18 @@ export function LandingPage() {
 
         <main>
           <HeroSection />
-          <StatsBar />
+          {sections.stats !== false && <StatsBar />}
           <GoldDivider className="max-w-7xl mx-auto px-6" icon="diamond" />
-          <ServicesSection />
+          {sections.services !== false && <ServicesSection />}
           <GoldDivider className="max-w-7xl mx-auto px-6" icon="scissor" />
-          <VideoSection />
-          <SpaceSection />
+          {sections.video !== false && <VideoSection />}
+          {sections.space !== false && <SpaceSection />}
           <GoldDivider className="max-w-7xl mx-auto px-6" icon="diamond" />
-          <GallerySection />
+          {sections.gallery !== false && <GallerySection />}
           <GoldDivider className="max-w-7xl mx-auto px-6" icon="scissor" />
-          <TestimonialsSection />
-          <BookingSection />
-          <LocationSection />
+          {sections.testimonials !== false && <TestimonialsSection />}
+          {sections.booking !== false && <BookingSection />}
+          {sections.location !== false && <LocationSection />}
         </main>
 
         <Footer />
