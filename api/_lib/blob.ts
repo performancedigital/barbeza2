@@ -8,7 +8,8 @@ async function readJsonBlob<T>(pathname: string): Promise<T | null> {
   const { blobs } = await list({ prefix: pathname, limit: 1 })
   const match = blobs.find(b => b.pathname === pathname) ?? blobs[0]
   if (!match) return null
-  const res = await fetch(match.url, { cache: 'no-store' })
+  const bustUrl = `${match.url}?v=${new Date(match.uploadedAt).getTime()}`
+  const res = await fetch(bustUrl, { cache: 'no-store' })
   if (!res.ok) return null
   return (await res.json()) as T
 }
