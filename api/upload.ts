@@ -1,7 +1,7 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client'
-import type { ApiRequest, ApiResponse } from './_lib/http'
-import { readJsonBody } from './_lib/http'
-import { verifyPassword } from './_lib/auth'
+import type { ApiRequest, ApiResponse } from './_lib/http.js'
+import { readJsonBody } from './_lib/http.js'
+import { verifyPassword } from './_lib/auth.js'
 
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 const VIDEO_TYPES = ['video/mp4']

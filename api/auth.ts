@@ -1,6 +1,6 @@
-import type { ApiRequest, ApiResponse } from './_lib/http'
-import { readTokenHeader, readJsonBody } from './_lib/http'
-import { verifyPassword, setPassword, resetPassword } from './_lib/auth'
+import type { ApiRequest, ApiResponse } from './_lib/http.js'
+import { readTokenHeader, readJsonBody } from './_lib/http.js'
+import { verifyPassword, setPassword, resetPassword } from './_lib/auth.js'
 
 export default async function handler(req: ApiRequest, res: ApiResponse): Promise<void> {
   res.setHeader('Cache-Control', 'no-store')

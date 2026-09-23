@@ -1,5 +1,5 @@
 import { list, put } from '@vercel/blob'
-import { DEFAULT_SITE_CONTENT } from './defaultContent'
+import { DEFAULT_SITE_CONTENT } from './defaultContent.js'
 
 export const CONTENT_PATHNAME = 'content/site.json'
 export const AUTH_PATHNAME = 'content/auth.json'

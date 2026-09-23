@@ -1,5 +1,5 @@
 import { createHash } from 'crypto'
-import { getAuthData, saveAuthData } from './blob'
+import { getAuthData, saveAuthData } from './blob.js'
 
 const PEPPER = 'barbeza-2026-salt'
 export const DEFAULT_PASSWORD = 'barbeza@2025'

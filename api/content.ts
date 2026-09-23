@@ -1,7 +1,7 @@
-import type { ApiRequest, ApiResponse } from './_lib/http'
-import { readTokenHeader, readJsonBody } from './_lib/http'
-import { getSiteContent, saveSiteContent } from './_lib/blob'
-import { verifyPassword } from './_lib/auth'
+import type { ApiRequest, ApiResponse } from './_lib/http.js'
+import { readTokenHeader, readJsonBody } from './_lib/http.js'
+import { getSiteContent, saveSiteContent } from './_lib/blob.js'
+import { verifyPassword } from './_lib/auth.js'
 
 function omitAuth(data: Record<string, unknown>): Record<string, unknown> {
   const { _auth, ...safe } = data
