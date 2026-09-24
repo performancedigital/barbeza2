@@ -1,12 +1,6 @@
-import { upload } from '@vercel/blob/client'
 import type { SiteContent } from '@/data/defaultContent'
 
 const TOKEN_HEADER = 'x-admin-token'
-
-function sanitizeFileName(name: string): string {
-  const lower = name.toLowerCase().trim()
-  return lower.replace(/[^a-z0-9.\-]+/g, '-').replace(/-+/g, '-')
-}
 
 async function parseJsonResponse(res: Response) {
   const data = await res.json().catch(() => ({}))
@@ -66,20 +60,31 @@ export async function resetPassword(): Promise<void> {
   await parseJsonResponse(res)
 }
 
-export async function uploadImage(file: File, token: string): Promise<string> {
-  const blob = await upload(`uploads/${Date.now()}-${sanitizeFileName(file.name)}`, file, {
-    access: 'public',
-    handleUploadUrl: '/api/upload',
-    clientPayload: JSON.stringify({ token }),
+async function uploadViaPresignedUrl(file: File, token: string): Promise<string> {
+  const initRes = await fetch('/api/upload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, fileName: file.name }),
   })
-  return blob.url
+  const { presignedUrl } = (await parseJsonResponse(initRes)) as { presignedUrl: string }
+
+  const putRes = await fetch(presignedUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': file.type || 'application/octet-stream' },
+    body: file,
+  })
+  if (!putRes.ok) {
+    const message = await putRes.text().catch(() => '')
+    throw new Error(message || 'Falha ao enviar arquivo.')
+  }
+  const result = (await putRes.json()) as { url: string }
+  return result.url
+}
+
+export async function uploadImage(file: File, token: string): Promise<string> {
+  return uploadViaPresignedUrl(file, token)
 }
 
 export async function uploadVideo(file: File, token: string): Promise<string> {
-  const blob = await upload(`uploads/${Date.now()}-${sanitizeFileName(file.name)}`, file, {
-    access: 'public',
-    handleUploadUrl: '/api/upload',
-    clientPayload: JSON.stringify({ token }),
-  })
-  return blob.url
+  return uploadViaPresignedUrl(file, token)
 }
